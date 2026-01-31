@@ -1,8 +1,6 @@
 
 export const game1Data = {
-    em1: "X",
-    channelId: null 
-    
+    em1: "X",    
 
 };
 

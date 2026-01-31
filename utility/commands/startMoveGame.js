@@ -8,16 +8,17 @@ import { game1States } from "../../gameFiles/objects/game1States.js";
 export const command = {
 	data: new SlashCommandBuilder().setName('movegame').setDescription('starts game 1'),
 	async execute(interaction) {
+		
 		console.log("Start Move Game command executed");
-		// defers reaction discord expects
 		await interaction.reply("starting game");
+
 		try {
 			const channel = await interaction.client.channels.fetch(interaction.channelId);
-			// store channel here to easily pass w data
 			const states = new game1States(channel);
-			states.channel = channel;
+
 			// this interaction will call the func to generate an initial board, + initial reactions
 			generateBoard(game1Logic, game1Data, states);
+
 		} catch (error){
 			console.error ("[startMoveGame] ERROR", error)
 		}

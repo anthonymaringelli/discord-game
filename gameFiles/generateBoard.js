@@ -4,9 +4,8 @@ export async function generateBoard(gameLogic, gameData, states) {
    try{
 
     const boardMsg = await gameLogic.start(gameData);
-    const channel = await gameData.channelId;
-    // console.log(String(gameData.channelId))
     sendMsg(boardMsg, states);
+
     
     }
     catch(error) {
