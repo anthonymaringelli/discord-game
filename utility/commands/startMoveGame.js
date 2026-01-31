@@ -2,6 +2,7 @@ import { SlashCommandBuilder, MessageFlags } from "discord.js";
 import { generateBoard } from "../../gameFiles/generateBoard.js";
 import { game1Logic } from "../../gameFiles/objects/game1Logic.js";
 import { game1Data } from "../../gameFiles/objects/game1Data.js";
+import { game1States } from "../../gameFiles/objects/game1States.js";
 
 
 export const command = {
@@ -13,9 +14,10 @@ export const command = {
 		try {
 			const channel = await interaction.client.channels.fetch(interaction.channelId);
 			// store channel here to easily pass w data
-			game1Data.channelId = channel;
+			const states = new game1States(channel);
+			states.channel = channel;
 			// this interaction will call the func to generate an initial board, + initial reactions
-			setTimeout(generateBoard(game1Logic, game1Data), 8000);
+			generateBoard(game1Logic, game1Data, states);
 		} catch (error){
 			console.error ("[startMoveGame] ERROR", error)
 		}
