@@ -1,8 +1,9 @@
 import { SlashCommandBuilder, MessageFlags } from "discord.js";
 import { generateBoard } from "../../gameFiles/generateBoard.js";
-import { game1Logic } from "../../gameFiles/objects/moveGame/moveLogic.js";
-import { game1Data } from "../../gameFiles/objects/moveGame/moveData.js";
-import { game1States } from "../../gameFiles/objects/moveGame/moveStates.js";
+// import { moveLogic } from "../../gameFiles/objects/moveGame/moveLogic.js";
+// import { moveData } from "../../gameFiles/objects/moveGame/moveData.js";
+// import { moveStates } from "../../gameFiles/objects/moveGame/moveStates.js";
+import { moveGame } from "../../gameFiles/objects/moveGame/moveClass.js"
 
 
 export const command = {
@@ -13,11 +14,13 @@ export const command = {
 		await interaction.reply("starting game");
 
 		try {
+			
 			const channel = await interaction.client.channels.fetch(interaction.channelId);
-			const states = new game1States(channel);
+			// init game object
+			const game = new moveGame(channel);
 
 			// this interaction will call the func to generate an initial board, + initial reactions
-			generateBoard(game1Logic, game1Data, states);
+			generateBoard(game.logic, game.data, game.states);
 
 		} catch (error){
 			console.error ("[startMoveGame] ERROR", error)
