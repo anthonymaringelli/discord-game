@@ -4,7 +4,6 @@
 export async function sendMsg(boardMsg, states) {
     try {
         console.log("[sendMsg] Sending message");
-        // const channel = await client.channels.fetch();
 
         const msg = await states.channel.send(boardMsg);
 
@@ -13,7 +12,7 @@ export async function sendMsg(boardMsg, states) {
         // X? not sure why it logs x, actual test will be if states.msgObj works when needed
         // console.log(String(msg)) 
         // 1467223757100941546
-        console.log(String(msg.id))
+        // console.log(String(msg.id))
         
     } catch (error){
         console.log("[sendMsg] ERROR", error);

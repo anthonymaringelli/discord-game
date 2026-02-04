@@ -2,11 +2,10 @@ import { moveData } from "./moveData.js";
 
 
 export const moveLogic = {
-    start: async function(moveData) {
-        return "Game 1 started!", moveData.background;
-    },
-    startReactions : [],
-    ifs: [],
+// func for: if x reaction hit, do function y( regen gameboard in specific way)
+// func for check if move possible
+// func for check if on apple, if so add point
+// everytime point won, func for checking if win condition points
 
 };
 

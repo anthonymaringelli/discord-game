@@ -14,13 +14,15 @@ export const command = {
 		await interaction.reply("starting game");
 
 		try {
-			
+			// gets channel obj, has channel id 
 			const channel = await interaction.client.channels.fetch(interaction.channelId);
-			// init game object
+			// init game obj, stores channel id plus channel obj in moveGame.states
 			const game = new moveGame(channel);
 
+			game.start();
+
 			// this interaction will call the func to generate an initial board, + initial reactions
-			generateBoard(game.logic, game.data, game.states);
+			// generateBoard(game.logic, game.data, game.states);
 
 		} catch (error){
 			console.error ("[startMoveGame] ERROR", error)
