@@ -25,12 +25,16 @@ export class moveGame {
         }
     }
 
+
     async genBoard() {
             // gotta hardcode this, discord renders emojis as images
             // not uniform monospace columns :(
             // 10 greensquare imgs are about 47 characters
         const separator = "#".repeat(47);
-        let gameBoard = this.data.background.repeat(this.config.length);
+            // strings are immutable, make an array, then join into string
+        let gameBoard = new Array(this.config.length).fill(this.data.background);
+        gameBoard[Math.floor(Math.random() * gameBoard.length)] = this.data.character;
+        gameBoard = gameBoard.join('');
 
             // sends msgs
         const sepMsg = await this.states.channel.send(separator)
@@ -55,8 +59,6 @@ export class moveGame {
         
         for (const r of reacts) {
             await this.states.msgObj.react(r);
-    
         }
     }
-    
 };

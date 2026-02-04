@@ -7,5 +7,7 @@ export const moveLogic = {
 // func for check if on apple, if so add point
 // everytime point won, func for checking if win condition points
 
+// func to track moves
+// func to display "you won in x moves"
 };
 
