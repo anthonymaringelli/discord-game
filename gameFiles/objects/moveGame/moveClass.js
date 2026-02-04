@@ -15,9 +15,9 @@ export class moveGame {
     async start() {
         try{
 
-            await this.genBoard();
+            await this.initPost();
             
-            const initReacts = await [this.data.leftReact, this.data.rightReact]
+            const initReacts = [this.data.leftReact, this.data.rightReact]
             await this.sendReactions(initReacts);
 
         } catch (error) {
@@ -26,25 +26,16 @@ export class moveGame {
     }
 
 
-    async genBoard() {
+    async initPost() {
             // gotta hardcode this, discord renders emojis as images
             // not uniform monospace columns :(
             // 10 greensquare imgs are about 47 characters
         const separator = "#".repeat(47);
-            // strings are immutable, make an array, then join into string
-        let gameBoard = new Array(this.config.length).fill(this.data.background);
-        gameBoard[Math.floor(Math.random() * gameBoard.length)] = this.data.character;
-        gameBoard = gameBoard.join('');
+        let gameBoard = await this.logic.genBoard();
 
             // sends msgs
         const sepMsg = await this.states.channel.send(separator)
         const gameMsg = await this.states.channel.send(gameBoard);
-            // reusable, for making multple msgs, hard to get the gameMsg, may be useful later
-        // const initMsg = [separator, gameBoard];
-        // await sendMsg(initMsg);
-        // for (let m of initMsg){
-        //     await this.states.channel.send(m);
-        // }
             
             // stores msg obj/ msg id so can find msg and edit it later
         this.states.msgObj = gameMsg;
