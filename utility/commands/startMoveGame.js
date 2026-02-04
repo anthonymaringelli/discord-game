@@ -1,14 +1,14 @@
 import { SlashCommandBuilder, MessageFlags } from "discord.js";
 import { generateBoard } from "../../gameFiles/generateBoard.js";
-import { game1Logic } from "../../gameFiles/objects/game1Logic.js";
-import { game1Data } from "../../gameFiles/objects/game1Data.js";
-import { game1States } from "../../gameFiles/objects/game1States.js";
+import { game1Logic } from "../../gameFiles/objects/moveGame/moveLogic.js";
+import { game1Data } from "../../gameFiles/objects/moveGame/moveData.js";
+import { game1States } from "../../gameFiles/objects/moveGame/moveStates.js";
 
 
 export const command = {
 	data: new SlashCommandBuilder().setName('movegame').setDescription('starts game 1'),
 	async execute(interaction) {
-		
+
 		console.log("Start Move Game command executed");
 		await interaction.reply("starting game");
 

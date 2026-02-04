@@ -1,5 +1,5 @@
 
-export class game1States {
+export class moveStates {
     constructor(channel){
         this.channel = channel;
         this.msgObj = null;
