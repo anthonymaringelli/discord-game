@@ -7,8 +7,7 @@ export class moveGame {
     constructor(channel) {
         this.logic = moveLogic;
         this.data = moveData;
-        this.states = moveStates;
-        this.states.channel = channel;
+        this.states = new moveStates(channel);
         this.config = moveConfig;
     }
 
