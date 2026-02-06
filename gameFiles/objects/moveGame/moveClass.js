@@ -2,6 +2,10 @@ import { moveLogic } from "./moveLogic.js"
 import { moveData } from "./moveData.js"
 import { moveStates } from "./moveStates.js"
 import { moveConfig } from "./moveConfig.js"
+import { initPost, storeMsg } from "../../handleMsgs.js"
+import { sendReactions, removeReactions } from "../../handleReactions.js"
+
+// import { } from "../../editMsg.js"
 
 export class moveGame {
     constructor(channel) {
@@ -14,11 +18,14 @@ export class moveGame {
     async start() {
         try{
             // first post
-            await this.initPost();
+            const gameMsg = await initPost(this);
+            // store msg id
+            await storeMsg(this, gameMsg);
 
             // first reactions
             const initReacts = [this.data.leftReact, this.data.rightReact]
-            await this.sendReactions(initReacts);
+            await removeReactions(this);
+            await sendReactions(this, initReacts);
 
             // starts reaction listener, sends user reactions -> moveLogic.js -> handleMove()
             this.listenForReactions(this.states.msgId, ({ emoji, user, message }) => {
@@ -30,35 +37,6 @@ export class moveGame {
         }
     }
 
-
-    async initPost() {
-
-            // makes seperator msg/ gens gameboard as a string
-        const separator = "#".repeat(this.config.length * 4.7);
-        let gameBoardString = await this.logic.genBoard(this.states);
-
-            // sends msgs
-        const sepMsg = await this.states.channel.send(separator)
-        const gameMsg = await this.states.channel.send(gameBoardString);
-            
-            // stores msg obj/ msg id so can find msg and edit it later
-        this.states.msgObj = gameMsg;
-        this.states.msgId = gameMsg.id;
-    }
-
-
-    // clears all reactions, then sends reactions from given array.
-    async sendReactions(reacts) {
-    
-        await this.states.msgObj.reactions.removeAll();
-        
-        for (const r of reacts) {
-            await this.states.msgObj.react(r);
-        }
-    }
-
-
-    // reaction handling delegated to moveLogic.handleMove
 
 
     // func to listen to reactions

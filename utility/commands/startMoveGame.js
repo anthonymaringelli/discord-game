@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, MessageFlags } from "discord.js";
-import { generateBoard } from "../../gameFiles/generateBoard.js";
+// import { generateBoard } from "../../gameFiles/generateBoard.js";
 // import { moveLogic } from "../../gameFiles/objects/moveGame/moveLogic.js";
 // import { moveData } from "../../gameFiles/objects/moveGame/moveData.js";
 // import { moveStates } from "../../gameFiles/objects/moveGame/moveStates.js";
@@ -25,7 +25,7 @@ export const command = {
 
 
 		} catch (error){
-			console.error ("[startMoveGame] ERROR", error)
+			console.error ("[ERROR] startMoveGame.js ", error)
 		}
 
 

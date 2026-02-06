@@ -3,10 +3,6 @@ import { moveConfig as config } from "./moveConfig.js";
 
 
 export const moveLogic = {
-    // apple: false,
-    // started: false,
-    moveCount: 0,
-
 
 // generates board 
     genBoard(states) {
@@ -54,12 +50,12 @@ export const moveLogic = {
 // func for: if x reaction, check if possible, then if possible do function y(regen gameboard in specific way)
     handleMove(move){
         console.log("move selected", move);
-        this.moveSelected(move);
+        // this.moveSelected(move);
     },
 
 // check if move possible, check if its a point, make the move
     moveSelected(move){
-        // movePossible(move);
+        movePossible(move);
         if (move === data.rightReact){
             this.movePossible(move)
             this.isApple()
@@ -73,8 +69,6 @@ export const moveLogic = {
             this.moveChar(move)
             // call genboard: regen func
         };
-
-
     },
 // func for check if move possible
     movePossible(move){
@@ -95,8 +89,8 @@ export const moveLogic = {
     },
 
 // func to track moves
-    moveCounter(){
-        moveCount ++;
+    moveCounter(states){
+        states.moveCount ++;
         console.log("Move count: ", movecount);
     },
 

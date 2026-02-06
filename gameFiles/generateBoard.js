@@ -1,16 +1,16 @@
-import { sendMsg } from "./sendMsg.js"
+// import { initPost } from "./sendMsg.js"
 
-export async function generateBoard(gameLogic, gameData, states) {
-   try{
+// export async function generateBoard(gameLogic, gameData, states) {
+//    try{
 
-    const boardMsg = await gameLogic.start(gameData);
-    sendMsg(boardMsg, states);
+//     const boardMsg = await gameLogic.start(gameData);
+//     sendMsg(boardMsg, states);
 
     
-    }
-    catch(error) {
-    console.error("[generateBoard] ERROR", error);
-    }
-};
+//     }
+//     catch(error) {
+//     console.error("[generateBoard] ERROR", error);
+//     }
+// };
 
 

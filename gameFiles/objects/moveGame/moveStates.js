@@ -12,6 +12,7 @@ export class moveStates {
         this.gameBoardArray = new Array(config.length);
         this.applePosition = null;
         this.charPosition = null;
+        this.moveCount = 0;
 
     }
 };
