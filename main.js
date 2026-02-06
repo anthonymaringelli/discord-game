@@ -8,14 +8,17 @@ const _dirname = path.dirname(new URL(import.meta.url).pathname).replace(/^\/([A
 dotenv.config({ path: path.join(_dirname, '.env') });
 
 import fs from "fs";
-import { Client, Collection, GatewayIntentBits } from "discord.js";
+import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 
 
 const client = new Client({ intents: [    
-	GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-],  });
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.GuildMessageReactions,
+		GatewayIntentBits.MessageContent
+],
+	partials: [Partials.Message, Partials.Reaction, Partials.User]
+});
 
 
 
