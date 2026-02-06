@@ -13,15 +13,15 @@ export class moveGame {
 
     async start() {
         try{
-
+            // first post
             await this.initPost();
-            
+
+            // first reactions
             const initReacts = [this.data.leftReact, this.data.rightReact]
             await this.sendReactions(initReacts);
 
-        
+            // starts reaction listener, sends user reactions -> moveLogic.js -> handleMove()
             this.listenForReactions(this.states.msgId, ({ emoji, user, message }) => {
-                // call moveLogic.handleMove with the emoji (moveLogic currently expects a single move arg)
                 this.logic.handleMove(emoji);
             });
 
@@ -32,10 +32,9 @@ export class moveGame {
 
 
     async initPost() {
-            // gotta hardcode this, discord renders emojis as images
-            // not uniform monospace columns :(
-            // 10 greensquare imgs are about 47 characters
-        const separator = "#".repeat(47);
+
+            // makes seperator msg/ gens gameboard as a string
+        const separator = "#".repeat(this.config.length * 4.7);
         let gameBoardString = await this.logic.genBoard(this.states);
 
             // sends msgs
@@ -65,26 +64,31 @@ export class moveGame {
     // func to listen to reactions
     // calls this.logic.moveSelected
     // redraws reactions, or removes user reaction
-    listenForReactions(messageId, onReact) {
-        const channel = this.states.channel;
-
+    async listenForReactions(messageId, onReact) {
+            const channel = this.states.channel;
+            const message = await channel.messages.fetch(messageId); 
         // fetch the message we want to listen to
-        channel.messages.fetch(messageId).then(message => {
-            // filter out bot reactions and only accept the left/right emojis
-            const filter = (reaction, user) => {
+        // channel.messages.fetch(messageId).then(message => {
+        //     // filter out bot reactions and only accept the left/right emojis
+        //     const filter = (reaction, user) => {
+        //         if (user.bot) return false;
+        //         return [this.data.leftReact, this.data.rightReact].includes(reaction.emoji.name);
+        //     };
+
+                // filters what the collector should listen for
+            const filter =(reaction, user) => {
                 if (user.bot) return false;
-                return [this.data.leftReact, this.data.rightReact].includes(reaction.emoji.name);
+                return [this.data.leftReact, this.data.rightReact].includes(reaction.emoji.name); 
             };
 
-                // discord.js messageobject,,, collect filtered reactions, do it for 2 mins
+                // discord.js message object,,, collect filtered reactions, do it for 20 mins
             const collector = message.createReactionCollector({
                 filter,
-                time: 120_000 // 2 minutes
+                time: 1200_000 // 20 minutes
             });
 
             collector.on("collect", async (reaction, user) => {
                 try {
-                    console.log('[DEBUG] collector collected', reaction.emoji?.name, 'from', user?.tag || user?.id);
                     // make sure full reaction, not partials
                     if (reaction.partial) await reaction.fetch();
 
@@ -98,7 +102,7 @@ export class moveGame {
                     // remove user's reaction so they can press again
                     reaction.users.remove(user.id).catch(() => {});
                 } catch (err) {
-                    console.error("[ERROR] collecting reaction", err);
+                    console.error("[ERROR] collector.on error", err);
                 }
             });
 
@@ -107,7 +111,6 @@ export class moveGame {
                 console.log("Reaction listener ended");
             });
 
-        }).catch(err => console.error("[ERROR] fetch message for reactions", err));
+        }
 
-    }
-};
+    };

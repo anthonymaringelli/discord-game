@@ -6,10 +6,10 @@ export class moveStates {
         this.channel = channel;
         this.msgObj = null;
         this.msgId = null;
-        this.gameBoardArray = new Array(config.length).fill(data.background);
+        // this.gameBoardArray = new Array(config.length).fill(data.background);
             // may need to move filling to genBoard logic, 
             // refill after each iteration and store here.
-        // this.gameBoardArray = new Array(config.length);
+        this.gameBoardArray = new Array(config.length);
         this.applePosition = null;
         this.charPosition = null;
 

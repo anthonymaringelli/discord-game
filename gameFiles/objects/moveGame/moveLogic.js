@@ -7,22 +7,28 @@ export const moveLogic = {
     started: false,
 
 
-// genBoard 
+// generates board 
     genBoard(states) {
-        if (this.started === false){
-            states.gameBoardArray = this.placeChar(states.gameBoardArray);
+        try{
+            this.fillBoard(states.gameBoardArray)
+            this.placeChar(states.gameBoardArray);
+            this.placeApple(states.gameBoardArray);
+            
+            let gameBoardString = states.gameBoardArray.join('');
+            return gameBoardString;
+        } catch(error) {
+            console.error("[ERROR] genBoard ", error)
         }
-        if (this.apple === false){
-            states.gameBoardArray = this.placeApple(states.gameBoardArray);
-        }
-        let gameBoardString = states.gameBoardArray.join('');
-        return gameBoardString;
+    },
+
+// fills array with data.background
+    fillBoard(gameBoardArray){
+        gameBoardArray.fill(data.background)
     },
 
 // init char placement
     placeChar(gameBoardArray){
         gameBoardArray[Math.floor(Math.random() * gameBoardArray.length)] = data.character;
-        return gameBoardArray
     },
     
 // place new apple
@@ -31,17 +37,22 @@ export const moveLogic = {
             let rndmIndx = Math.floor(Math.random() * gameBoardArray.length);
             if (gameBoardArray[rndmIndx] !== data.character){
                 gameBoardArray[rndmIndx] = data.apple;
+                return;
                 // this.apple = true;
-                return gameBoardArray;
             }
         } while (true);
         // if there's no free space this will be an infite loop
 
     },
+
+
+
 // func for: if x reaction, check if possible, then if possible do function y(regen gameboard in specific way)
     handleMove(move){
         console.log("GOT IT");
+        moveSelected(move);
     },
+
     moveSelected(move){
         // movePossible(move);
         if (move === data.rightReact){

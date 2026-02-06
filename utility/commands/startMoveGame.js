@@ -21,8 +21,6 @@ export const command = {
 
 			game.start();
 
-			// this interaction will call the func to generate an initial board, + initial reactions
-			// generateBoard(game.logic, game.data, game.states);
 
 		} catch (error){
 			console.error ("[startMoveGame] ERROR", error)
