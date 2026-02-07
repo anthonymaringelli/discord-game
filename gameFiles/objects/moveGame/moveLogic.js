@@ -1,22 +1,22 @@
 import { moveData as data } from "./moveData.js";
 import { moveConfig as config } from "./moveConfig.js";
+import { editMsg } from "../../msgHelpers.js";
+
 
 
 export const moveLogic = {
 
 // generates board 
-    genBoard(states) {
+    genBoard(states, newPos) {
         try{
 
             this.fillBoard(states.gameBoardArray)
-            // const randomIndex = Math.floor(Math.random() * states.gameBoardArray.length);
-            this.placeChar(states, Math.floor(Math.random() * states.gameBoardArray.length));
-            this.placeApple(states, Math.floor(Math.random() * states.gameBoardArray.length));
+            this.placeChar(states, newPos);
+            this.placeApple(states);
 
             console.log("START: Char:", states.charPosition, "Apple:", states.applePosition);
             
             let gameBoardString = states.gameBoardArray.join('');
-
             return gameBoardString;
 
         } catch(error) {
@@ -37,13 +37,13 @@ export const moveLogic = {
     },
     
 // place new apple
-    placeApple(states, rndmIndx){
+    placeApple(states){
         do {
-            // let rndmIndx = Math.floor(Math.random() * states.gameBoardArray.length);
-            if (states.gameBoardArray[rndmIndx] !== data.character){
+            let position = Math.floor(Math.random() * states.gameBoardArray.length);
+            if (states.gameBoardArray[position] !== data.character){
 
-                states.gameBoardArray[rndmIndx] = data.apple;
-                states.applePosition = rndmIndx;
+                states.gameBoardArray[position] = data.apple;
+                states.applePosition = position;
 
                 return;
             }
@@ -79,9 +79,11 @@ export const moveLogic = {
                 game.states.points ++;
                 // regen apple: true
             }
-            // this.moveChar(move)
+            this.placeChar(game.states, game.states.charPosition);
             this.moveCounter(game)
-            // call genboard: regen func
+            const newBoard = this.genBoard(game.states, newPos);
+            editMsg(game.states.client, game.states.channel.id, game.states.msgId, newBoard);
+            // call msg
 
     },
    
@@ -119,5 +121,5 @@ export const moveLogic = {
     }
 };
 
-// sep send msg into its own file
-// sep edit msg into its own file
+
+

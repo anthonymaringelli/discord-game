@@ -7,6 +7,7 @@ export class moveStates {
         this.channel = channel;
         this.msgObj = null;
         this.msgId = null;
+        this.client = null;
             // game states
         this.gameBoardArray = new Array(config.length);
         this.applePosition = null;

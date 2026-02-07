@@ -1,10 +1,9 @@
 
 
-// sends initial post w seperator
-export async function initPost(game) {
+    // sends initial post w seperator
+export async function initPost(game, gameBoardString) {
         // makes seperator msg/ gens gameboard as a string
     const separator = "#".repeat(game.config.length * 4.7);
-    let gameBoardString = await game.logic.genBoard(game.states);
 
         // sends msgs
     const sepMsg = await game.states.channel.send(separator)
@@ -23,3 +22,17 @@ export async function storeMsg(game, gameMsg){
     game.states.msgObj = gameMsg;
     game.states.msgId = gameMsg.id;
 };
+
+    // edits given msg with given new content
+export async function editMsg(client,channelId, messageId, newMsg){
+    try{
+        const channel = await client.channels.fetch(channelId);
+        const message = await channel.messages.fetch(messageId);
+
+        const editedMessage = await message.edit(newMsg);
+        
+    } catch (error) {
+        console.error("[ERROR] editMsg.js ", error)
+    }
+
+}

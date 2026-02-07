@@ -2,10 +2,9 @@ import { moveLogic } from "./moveLogic.js"
 import { moveData } from "./moveData.js"
 import { moveStates } from "./moveStates.js"
 import { moveConfig } from "./moveConfig.js"
-import { initPost, storeMsg } from "../../msgHelpers.js"
+import { initPost, storeMsg, editMsg } from "../../msgHelpers.js"
 import { sendReactions, removeReactions } from "../../reactionHelpers.js"
 
-// import { } from "../../editMsg.js"
 
 export class moveGame {
     constructor(channel) {
@@ -18,9 +17,11 @@ export class moveGame {
     async start() {
         try{
             // first post
-            const gameMsg = await initPost(this);
+            const gameBoardString = await this.logic.genBoard(this.states, Math.floor(Math.random() * this.states.gameBoardArray.length));
+            const gameMsg = await initPost(this, gameBoardString);
             // store msg id
             await storeMsg(this, gameMsg);
+
 
             // first reactions
             const initReacts = [this.data.leftReact, this.data.rightReact]
