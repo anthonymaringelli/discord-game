@@ -44,11 +44,10 @@ export const moveLogic = {
 // place new apple
     placeApple(states){
     if (states.applePosition === null){
-        let position;
 
         do {
             // pick a random position each iteration
-            position = Math.floor(Math.random() * states.gameBoardArray.length);
+            let position = Math.floor(Math.random() * states.gameBoardArray.length);
 
             if (states.gameBoardArray[position] !== data.character){
                 states.gameBoardArray[position] = data.apple;
@@ -145,9 +144,15 @@ export const moveLogic = {
         if (points >= 5){
             const finMsg = `You won in ${game.states.moveCount} moves!`;
             editMsg(game.states.client, game.states.channel.id, game.states.msgId, finMsg);
+            
         };
     }
 };
+
+
+// PROBLEMS:
+// win doesnt end game
+// apple updating spotty -- probably change where it updates, sometimes red runs into apple, on same square, should be impossible
 
 
 

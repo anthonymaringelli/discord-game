@@ -14,5 +14,8 @@ export class moveStates {
         this.charPosition = null;
         this.moveCount = 0;
         this.points = 0;
+
+            // master switch
+        this.gameActive = true;
     }
 };
