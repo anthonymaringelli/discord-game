@@ -7,13 +7,18 @@ export const moveLogic = {
 // generates board 
     genBoard(states) {
         try{
+
             this.fillBoard(states.gameBoardArray)
-            this.placeChar(states);
-            this.placeApple(states.gameBoardArray);
+            // const randomIndex = Math.floor(Math.random() * states.gameBoardArray.length);
+            this.placeChar(states, Math.floor(Math.random() * states.gameBoardArray.length));
+            this.placeApple(states, Math.floor(Math.random() * states.gameBoardArray.length));
+
+            console.log("START: Char:", states.charPosition, "Apple:", states.applePosition);
             
             let gameBoardString = states.gameBoardArray.join('');
-            console.log(gameBoardString);
+
             return gameBoardString;
+
         } catch(error) {
             console.error("[ERROR] genBoard ", error)
         }
@@ -25,19 +30,21 @@ export const moveLogic = {
     },
 
 // init char placement
-    placeChar(states){
-        const randomIndex = Math.floor(Math.random() * states.gameBoardArray.length);
-        states.gameBoardArray[randomIndex] = data.character;
-        states.charPosition = randomIndex;
+    placeChar(states, position){
+        states.gameBoardArray[position] = data.character;
+        states.charPosition = position;
 
     },
     
 // place new apple
-    placeApple(gameBoardArray){
+    placeApple(states, rndmIndx){
         do {
-            let rndmIndx = Math.floor(Math.random() * gameBoardArray.length);
-            if (gameBoardArray[rndmIndx] !== data.character){
-                gameBoardArray[rndmIndx] = data.apple;
+            // let rndmIndx = Math.floor(Math.random() * states.gameBoardArray.length);
+            if (states.gameBoardArray[rndmIndx] !== data.character){
+
+                states.gameBoardArray[rndmIndx] = data.apple;
+                states.applePosition = rndmIndx;
+
                 return;
             }
         } while (true);
@@ -48,40 +55,49 @@ export const moveLogic = {
 
 
 // func for: if x reaction, check if possible, then if possible do function y(regen gameboard in specific way)
-    handleMove(move){
+    handleMove(game, move){
         console.log("move selected", move);
-        // this.moveSelected(move);
+        this.moveSelected(game, move);
     },
 
 // check if move possible, check if its a point, make the move
-    moveSelected(move){
-        movePossible(move);
-        if (move === data.rightReact){
-            this.movePossible(move)
-            this.isApple()
-            this.moveChar(move)
+    moveSelected(game, move){
+        const direction = this.getDelta(move);
+
+        const newPos = game.states.charPosition  + direction;
+        if (!this.movePossible(game, newPos)){
+             console.log("Invalid move!"); 
+             return;
+        };    
+             
+        game.states.charPosition = newPos;
+
+        console.log(move === data.rightReact ? "RIGHT!" : "LEFT!");
+        console.log("Char:", game.states.charPosition, "Apple:", game.states.applePosition);
+
+            if (game.states.charPosition === game.states.applePosition) {
+                game.states.points ++;
+                // regen apple: true
+            }
+            // this.moveChar(move)
+            this.moveCounter(game)
             // call genboard: regen func
-        };
-        
-        if (move === data.leftReact){
-            this.movePossible(move)
-            this.isApple()
-            this.moveChar(move)
-            // call genboard: regen func
-        };
+
     },
-// func for check if move possible
-    movePossible(move){
-        // if move(indx) in board exists, call checkApple function
-        // checkApple function: if move is an apple, add 1 to score: call genBoard w apple= true
-        //  which will trigger placeApple func
-         
+   
+
+// func for move change
+    getDelta(move){    
+        if (move === data.rightReact) return 1;
+        if (move === data.leftReact) return -1;
     },
 
-// if on apple, add point, check if win, regen apple
-    isPoint(gameboard, move){
-        
+
+// func for check if move possible
+    movePossible(game, newPos) {
+        return newPos >= 0 && newPos < game.states.gameBoardArray.length;
     },
+
 
 // move char, call editMsg, passing new board
     moveChar(gameBoard, move){
@@ -89,15 +105,16 @@ export const moveLogic = {
     },
 
 // func to track moves
-    moveCounter(states){
-        states.moveCount ++;
-        console.log("Move count: ", movecount);
+    moveCounter(game){
+        game.states.moveCount ++;
+        console.log("Move count: ", game.states.moveCount);
     },
 
 // sends win msg
-    winCheck(points){
+    winCheck(game, points){
         if (points >= 5){
-            // rewrites board, u won in x moves
+            // const finMsg = `You won in ${game.states.moveCount moves}`;
+            // REWRITE MSG FUNCTION(game.states.msgId, finMsg);
         };
     }
 };

@@ -2,8 +2,8 @@ import { moveLogic } from "./moveLogic.js"
 import { moveData } from "./moveData.js"
 import { moveStates } from "./moveStates.js"
 import { moveConfig } from "./moveConfig.js"
-import { initPost, storeMsg } from "../../handleMsgs.js"
-import { sendReactions, removeReactions } from "../../handleReactions.js"
+import { initPost, storeMsg } from "../../msgHelpers.js"
+import { sendReactions, removeReactions } from "../../reactionHelpers.js"
 
 // import { } from "../../editMsg.js"
 
@@ -29,7 +29,7 @@ export class moveGame {
 
             // starts reaction listener, sends user reactions -> moveLogic.js -> handleMove()
             this.listenForReactions(this.states.msgId, ({ emoji, user, message }) => {
-                this.logic.handleMove(emoji);
+                this.logic.handleMove(this, emoji);
             });
 
         } catch (error) {
@@ -38,20 +38,9 @@ export class moveGame {
     }
 
 
-
-    // func to listen to reactions
-    // calls this.logic.moveSelected
-    // redraws reactions, or removes user reaction
     async listenForReactions(messageId, onReact) {
             const channel = this.states.channel;
             const message = await channel.messages.fetch(messageId); 
-        // fetch the message we want to listen to
-        // channel.messages.fetch(messageId).then(message => {
-        //     // filter out bot reactions and only accept the left/right emojis
-        //     const filter = (reaction, user) => {
-        //         if (user.bot) return false;
-        //         return [this.data.leftReact, this.data.rightReact].includes(reaction.emoji.name);
-        //     };
 
                 // filters what the collector should listen for
             const filter =(reaction, user) => {
@@ -71,14 +60,14 @@ export class moveGame {
                     if (reaction.partial) await reaction.fetch();
 
                     // forward reaction to the provided callback
-                    onReact({
+                    await onReact({
                         emoji: reaction.emoji.name,
                         user,
                         message
                     });
 
                     // remove user's reaction so they can press again
-                    reaction.users.remove(user.id).catch(() => {});
+                    await reaction.users.remove(user.id).catch(() => {});
                 } catch (err) {
                     console.error("[ERROR] collector.on error", err);
                 }
@@ -88,7 +77,5 @@ export class moveGame {
                 // optional: cleanup or log
                 console.log("Reaction listener ended");
             });
-
         }
-
     };
