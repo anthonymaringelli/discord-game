@@ -13,16 +13,21 @@ export const moveLogic = {
             this.fillBoard(states.gameBoardArray)
             this.placeChar(states, newPos);
             this.placeApple(states);
+        
+            
 
             console.log("START: Char:", states.charPosition, "Apple:", states.applePosition);
-            
-            let gameBoardString = states.gameBoardArray.join('');
-            return gameBoardString;
 
         } catch(error) {
             console.error("[ERROR] genBoard ", error)
         }
     },
+
+    renderBoard(states){
+        let gameBoardString = states.gameBoardArray.join('');
+        return gameBoardString;
+    },
+    
 
 // fills array with data.background
     fillBoard(gameBoardArray){
@@ -38,19 +43,30 @@ export const moveLogic = {
     
 // place new apple
     placeApple(states){
-        do {
-            let position = Math.floor(Math.random() * states.gameBoardArray.length);
-            if (states.gameBoardArray[position] !== data.character){
+    if (states.applePosition === null){
+        let position;
 
+        do {
+            // pick a random position each iteration
+            position = Math.floor(Math.random() * states.gameBoardArray.length);
+
+            if (states.gameBoardArray[position] !== data.character){
                 states.gameBoardArray[position] = data.apple;
                 states.applePosition = position;
-
                 return;
             }
+
         } while (true);
+
+    } else {
+        // apple already exists, render it in the board
+        states.gameBoardArray[states.applePosition] = data.apple;
+    }
+    },
+
+
         // if there's no free space this will be an infite loop
 
-    },
 
 
 
@@ -62,28 +78,40 @@ export const moveLogic = {
 
 // check if move possible, check if its a point, make the move
     moveSelected(game, move){
-        const direction = this.getDelta(move);
 
+            // get new move, check if possible
+        const direction = this.getDelta(move);
         const newPos = game.states.charPosition  + direction;
         if (!this.movePossible(game, newPos)){
              console.log("Invalid move!"); 
              return;
-        };    
-             
+        };     
         game.states.charPosition = newPos;
 
         console.log(move === data.rightReact ? "RIGHT!" : "LEFT!");
         console.log("Char:", game.states.charPosition, "Apple:", game.states.applePosition);
 
+                // check if on apple
             if (game.states.charPosition === game.states.applePosition) {
                 game.states.points ++;
-                // regen apple: true
+                console.log("Point scored! Total points: ", game.states.points);
+                    // check if win
+                this.winCheck(game, game.states.points);
+                    // regen apple
+                game.states.applePosition = null;
+                this.placeApple(game.states);
             }
+
+                // set new char indx
             this.placeChar(game.states, game.states.charPosition);
+                // track moves
             this.moveCounter(game)
-            const newBoard = this.genBoard(game.states, newPos);
+                // regen board positions
+            this.genBoard(game.states, newPos);
+                // new board string
+            const newBoard = this.renderBoard(game.states);
+                // send new board to editMsg
             editMsg(game.states.client, game.states.channel.id, game.states.msgId, newBoard);
-            // call msg
 
     },
    
@@ -115,8 +143,8 @@ export const moveLogic = {
 // sends win msg
     winCheck(game, points){
         if (points >= 5){
-            // const finMsg = `You won in ${game.states.moveCount moves}`;
-            // REWRITE MSG FUNCTION(game.states.msgId, finMsg);
+            const finMsg = `You won in ${game.states.moveCount} moves!`;
+            editMsg(game.states.client, game.states.channel.id, game.states.msgId, finMsg);
         };
     }
 };

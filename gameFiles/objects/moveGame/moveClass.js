@@ -17,7 +17,8 @@ export class moveGame {
     async start() {
         try{
             // first post
-            const gameBoardString = await this.logic.genBoard(this.states, Math.floor(Math.random() * this.states.gameBoardArray.length));
+            const gameBoardPositions = await this.logic.genBoard(this.states, Math.floor(Math.random() * this.states.gameBoardArray.length));
+            const gameBoardString = await this.logic.renderBoard(this.states);
             const gameMsg = await initPost(this, gameBoardString);
             // store msg id
             await storeMsg(this, gameMsg);
