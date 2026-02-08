@@ -2,7 +2,7 @@ import { moveLogic } from "./moveLogic.js"
 import { moveData } from "./moveData.js"
 import { moveStates } from "./moveStates.js"
 import { moveConfig } from "./moveConfig.js"
-import { initPost, storeMsg, editMsg } from "../../msgHelpers.js"
+import { initPost, storeMsg, editMsg, editFinalMsg } from "../../msgHelpers.js"
 import { sendReactions, removeReactions } from "../../reactionHelpers.js"
 import { listenForReactions } from "../../reactionListener.js"
 
@@ -19,7 +19,7 @@ export class moveGame {
         try{
             // first post
             const gameBoardPositions = await this.logic.genBoard(this.states, Math.floor(Math.random() * this.states.gameBoardArray.length));
-            const gameBoardString = await this.logic.renderBoard(this.states);
+            const gameBoardString = await this.logic.stringifyBoard(this.states);
             const gameMsg = await initPost(this, gameBoardString);
             // store msg id
             await storeMsg(this, gameMsg);
@@ -31,14 +31,38 @@ export class moveGame {
             await sendReactions(this, initReacts);
 
             // starts reaction listener, sends user reactions -> moveLogic.js -> handleMove()
-            listenForReactions(this, this.states.msgId, ({ emoji, user, message }) => {
+            const collector = await listenForReactions(this, this.states.msgId, ({ emoji, user, message }) => {
                 this.logic.handleMove(this, emoji);
             });
+            this.states.collector = collector;
+
+
 
         } catch (error) {
             console.error("[ERROR] moveGame start(), ", error)
         }
     }
 
+    sendToEdit(newBoard){
+        if (this.states.gameActive === false) return;
+        editMsg(this.states.client, this.states.channel.id, this.states.msgId, newBoard);
+    }
 
-    };
+    endGame() {
+        // ends collector, sends final msg, removes reactions
+        this.states.gameActive = false;
+
+        const finMsg = `You won in ${this.states.moveCount} moves!`;
+
+        editFinalMsg(this.states.gameBoardArray, this.states.client, this.states.channel.id, this.states.msgId, this.config, finMsg);
+
+        removeReactions(this);
+
+        // this.states.collector.stop();
+
+    }
+
+
+
+
+};

@@ -1,9 +1,9 @@
- 
- 
-  
 
 
+        // listens for specific reactions, sends them to moveClass.js
 export async function listenForReactions(game, messageId, onReact) {
+         if (game.states.isActive === false) return;
+
         const channel = game.states.channel;
         const message = await channel.messages.fetch(messageId); 
 
@@ -38,8 +38,11 @@ export async function listenForReactions(game, messageId, onReact) {
                 }
         });
 
+
         collector.on("end", () => {
-                // optional: cleanup or log
-        console.log("Reaction listener ended");
+                console.log("Reaction listener ended");
         });
+        
+        return collector;
+
 }

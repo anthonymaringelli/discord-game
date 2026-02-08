@@ -9,25 +9,23 @@ export const moveLogic = {
 // generates board 
     genBoard(states, newPos) {
         try{
-
+            // if (states.gameActive === false) return;
             this.fillBoard(states.gameBoardArray)
             this.placeChar(states, newPos);
             this.placeApple(states);
-        
-            
 
-            console.log("START: Char:", states.charPosition, "Apple:", states.applePosition);
 
         } catch(error) {
             console.error("[ERROR] genBoard ", error)
         }
     },
 
-    renderBoard(states){
+// turns array into string
+    stringifyBoard(states){
         let gameBoardString = states.gameBoardArray.join('');
         return gameBoardString;
     },
-    
+
 
 // fills array with data.background
     fillBoard(gameBoardArray){
@@ -71,7 +69,7 @@ export const moveLogic = {
 
 // func for: if x reaction, check if possible, then if possible do function y(regen gameboard in specific way)
     handleMove(game, move){
-        console.log("move selected", move);
+         if (game.states.isActive === false) return;
         this.moveSelected(game, move);
     },
 
@@ -82,13 +80,9 @@ export const moveLogic = {
         const direction = this.getDelta(move);
         const newPos = game.states.charPosition  + direction;
         if (!this.movePossible(game, newPos)){
-             console.log("Invalid move!"); 
              return;
         };     
         game.states.charPosition = newPos;
-
-        console.log(move === data.rightReact ? "RIGHT!" : "LEFT!");
-        console.log("Char:", game.states.charPosition, "Apple:", game.states.applePosition);
 
                 // check if on apple
             if (game.states.charPosition === game.states.applePosition) {
@@ -108,12 +102,11 @@ export const moveLogic = {
                 // regen board positions
             this.genBoard(game.states, newPos);
                 // new board string
-            const newBoard = this.renderBoard(game.states);
+            const newBoard = this.stringifyBoard(game.states);
                 // send new board to editMsg
-            editMsg(game.states.client, game.states.channel.id, game.states.msgId, newBoard);
-
+            game.sendToEdit(newBoard);
     },
-   
+
 
 // func for move change
     getDelta(move){    
@@ -127,23 +120,15 @@ export const moveLogic = {
         return newPos >= 0 && newPos < game.states.gameBoardArray.length;
     },
 
-
-// move char, call editMsg, passing new board
-    moveChar(gameBoard, move){
-
-    },
-
 // func to track moves
     moveCounter(game){
         game.states.moveCount ++;
-        console.log("Move count: ", game.states.moveCount);
     },
 
 // sends win msg
     winCheck(game, points){
-        if (points >= 5){
-            const finMsg = `You won in ${game.states.moveCount} moves!`;
-            editMsg(game.states.client, game.states.channel.id, game.states.msgId, finMsg);
+        if (points >= 2){            
+            game.endGame();
             
         };
     }
@@ -152,7 +137,8 @@ export const moveLogic = {
 
 // PROBLEMS:
 // win doesnt end game
-// apple updating spotty -- probably change where it updates, sometimes red runs into apple, on same square, should be impossible
+
+// apple updating spotty -- probably change where it updates, sometimes red runs into apple, on same square, should be impossible ------- so actually apple just spawns on top of the char, rendered after char 
 
 
 
