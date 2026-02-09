@@ -22,7 +22,6 @@ export class moveGame {
             const gameBoardString = await this.logic.stringifyBoard(this.states);
             await initPost(this, gameBoardString);
 
-
             // first reactions
             const initReacts = [this.data.leftReact, this.data.rightReact]
             await removeReactions(this);
@@ -33,8 +32,6 @@ export class moveGame {
                 this.logic.handleMove(this, emoji);
             });
             this.states.collector = collector;
-
-
 
         } catch (error) {
             console.error("[ERROR] moveGame start(), ", error)
@@ -47,8 +44,8 @@ export class moveGame {
         editMsg(this.states.client, this.states.channel.id, this.states.msgId, newBoard);
     }
 
+    // ends collector, sends final msg, removes reactions
     endGame() {
-        // ends collector, sends final msg, removes reactions
         this.states.gameActive = false;
 
         const finMsg = ` You won in ${this.states.moveCount} moves! `;
@@ -57,12 +54,6 @@ export class moveGame {
 
         removeReactions(this);
 
-        // TEST THIS ////////////////////////////////////////////////////////
-        // this.states.collector.stop();
-
+        this.states.collector.stop();
     }
-
-
-
-
 };

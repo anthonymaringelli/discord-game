@@ -138,10 +138,10 @@ export const moveLogic = {
 
 // PROBLEMS:
 
-
 // test ending reaction listener
-// mojor cleanup/ file separation
+
     // BIGGER
+// major cleanup/ file separation
 // extra separators after, reaction on lowest
 // top line of text to update
 

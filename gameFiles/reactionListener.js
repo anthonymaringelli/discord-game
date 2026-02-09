@@ -2,7 +2,9 @@
 
         // listens for specific reactions, sends them to moveClass.js
 export async function listenForReactions(game, messageId, onReact) {
-         if (game.states.isActive === false) return;
+         if (game.states.isActive === false) {
+                console.log("Game is not active, not starting reaction listener");
+                return;}
 
         const channel = game.states.channel;
         const message = await channel.messages.fetch(messageId); 
