@@ -136,7 +136,6 @@ export const moveLogic = {
 
 
 // PROBLEMS:
-// win doesnt end game
 
 // apple updating spotty -- probably change where it updates, sometimes red runs into apple, on same square, should be impossible ------- so actually apple just spawns on top of the char, rendered after char 
 

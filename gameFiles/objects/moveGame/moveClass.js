@@ -20,9 +20,7 @@ export class moveGame {
             // first post
             const gameBoardPositions = await this.logic.genBoard(this.states, Math.floor(Math.random() * this.states.gameBoardArray.length));
             const gameBoardString = await this.logic.stringifyBoard(this.states);
-            const gameMsg = await initPost(this, gameBoardString);
-            // store msg id
-            await storeMsg(this, gameMsg);
+            await initPost(this, gameBoardString);
 
 
             // first reactions
@@ -43,6 +41,7 @@ export class moveGame {
         }
     }
 
+    // updates the board
     sendToEdit(newBoard){
         if (this.states.gameActive === false) return;
         editMsg(this.states.client, this.states.channel.id, this.states.msgId, newBoard);
@@ -52,12 +51,13 @@ export class moveGame {
         // ends collector, sends final msg, removes reactions
         this.states.gameActive = false;
 
-        const finMsg = `You won in ${this.states.moveCount} moves!`;
+        const finMsg = ` You won in ${this.states.moveCount} moves! `;
 
         editFinalMsg(this.states.gameBoardArray, this.states.client, this.states.channel.id, this.states.msgId, this.config, finMsg);
 
         removeReactions(this);
 
+        // TEST THIS ////////////////////////////////////////////////////////
         // this.states.collector.stop();
 
     }
