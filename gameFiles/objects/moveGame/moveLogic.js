@@ -78,11 +78,16 @@ export const moveLogic = {
 
             // get new move, check if possible
         const direction = this.getDelta(move);
-        const newPos = game.states.charPosition  + direction;
+        const newPos = game.states.charPosition + direction;
         if (!this.movePossible(game, newPos)){
              return;
         };     
         game.states.charPosition = newPos;
+
+                // set new char indx
+            this.placeChar(game.states, game.states.charPosition);
+                // track moves
+            this.moveCounter(game)
 
                 // check if on apple
             if (game.states.charPosition === game.states.applePosition) {
@@ -95,10 +100,6 @@ export const moveLogic = {
                 this.placeApple(game.states);
             }
 
-                // set new char indx
-            this.placeChar(game.states, game.states.charPosition);
-                // track moves
-            this.moveCounter(game)
                 // regen board positions
             this.genBoard(game.states, newPos);
                 // new board string
@@ -137,7 +138,11 @@ export const moveLogic = {
 
 // PROBLEMS:
 
-// apple updating spotty -- probably change where it updates, sometimes red runs into apple, on same square, should be impossible ------- so actually apple just spawns on top of the char, rendered after char 
 
+// test ending reaction listener
+// mojor cleanup/ file separation
+    // BIGGER
+// extra separators after, reaction on lowest
+// top line of text to update
 
 
