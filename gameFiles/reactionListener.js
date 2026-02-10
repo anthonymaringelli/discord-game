@@ -11,7 +11,8 @@ export async function listenForReactions(game, messageId, onReact) {
 
                 // filters what the collector should listen for
         const filter =(reaction, user) => {
-                if (user.bot) return false;
+//////////// POSSIBLY LAGS? ////////////////////////////////////////////////////////////
+                if (user.id !== game.states.userId) return false; 
                 return [game.data.leftReact, game.data.rightReact].includes(reaction.emoji.name); 
         };
 

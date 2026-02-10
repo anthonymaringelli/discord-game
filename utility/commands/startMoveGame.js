@@ -14,14 +14,13 @@ export const command = {
 		await interaction.reply("starting game");
 
 		try {
-			// gets channel obj from discord interaction
 			const channel = await interaction.client.channels.fetch(interaction.channelId);
-			
-			// init game object
-			const game = new moveGame(channel);
-			game.states.client = interaction.client;
+			const userId = interaction.user.id;
+			const client = interaction.client;
 
-			// calls func in game object 
+			// init game object
+			const game = new moveGame(channel, userId, client);
+
 			game.start();
 
 

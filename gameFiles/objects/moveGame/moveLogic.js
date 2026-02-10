@@ -1,6 +1,4 @@
 import { moveData as data } from "./moveData.js";
-import { moveConfig as config } from "./moveConfig.js";
-import { editMsg } from "../../msgHelpers.js";
 
 
 
@@ -20,6 +18,8 @@ export const moveLogic = {
         }
     },
 
+
+
 // turns array into string
     stringifyBoard(states){
         let gameBoardString = states.gameBoardArray.join('');
@@ -27,10 +27,13 @@ export const moveLogic = {
     },
 
 
+
 // fills array with data.background
     fillBoard(gameBoardArray){
         gameBoardArray.fill(data.background)
     },
+
+
 
 // init char placement
     placeChar(states, position){
@@ -38,7 +41,9 @@ export const moveLogic = {
         states.charPosition = position;
 
     },
+   
     
+
 // place new apple
     placeApple(states){
     if (states.applePosition === null){
@@ -59,11 +64,7 @@ export const moveLogic = {
         // apple already exists, render it in the board
         states.gameBoardArray[states.applePosition] = data.apple;
     }
-    },
-
-
-        // if there's no free space this will be an infite loop
-
+},
 
 
 
@@ -72,6 +73,8 @@ export const moveLogic = {
          if (game.states.isActive === false) return;
         this.moveSelected(game, move);
     },
+
+
 
 // check if move possible, check if its a point, make the move
     moveSelected(game, move){
@@ -126,24 +129,26 @@ export const moveLogic = {
         game.states.moveCount ++;
     },
 
-// sends win msg
+// sends win msg if meets win condition 
     winCheck(game, points){
         if (points >= 2){            
-            game.endGame();
-            
+            game.endGame();     
         };
     }
 };
 
 
+
 // PROBLEMS:
 
-// test ending reaction listener
+// check user reactions
 
     // BIGGER
 // major cleanup/ file separation
     // helpers
+        // fix spacer thing
     // class
+        // move listener starter?
     // logic
 // extra separators after, reaction on lowest
 // top line of text to update

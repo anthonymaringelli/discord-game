@@ -8,11 +8,11 @@ import { listenForReactions } from "../../reactionListener.js"
 
 
 export class moveGame {
-    constructor(channel) {
+    constructor(channel, userId) {
         this.logic = moveLogic;
         this.data = moveData;
         this.config = moveConfig;
-        this.states = new moveStates(channel);
+        this.states = new moveStates(channel, userId);
     }
 
 
@@ -25,11 +25,10 @@ export class moveGame {
 
             // first reactions
             const initReacts = [this.data.leftReact, this.data.rightReact]
-            await removeReactions(this);
             await sendReactions(this, initReacts);
 
             // starts reaction listener, sends user reactions -> moveLogic.js -> handleMove()
-            const collector = await listenForReactions(this, this.states.msgId, ({ emoji, user, message }) => {
+            const collector = await listenForReactions(this, this.states.msgId, ({ emoji }) => {
                 this.logic.handleMove(this, emoji);
             });
             this.states.collector = collector;
@@ -46,17 +45,15 @@ export class moveGame {
         editMsg(this.states, newBoard);
     }
 
-    
+
     // ends collector, sends final msg, removes reactions
     endGame() {
         this.states.gameActive = false;
 
         const finMsg = ` You won in ${this.states.moveCount} moves! `;
-
         editFinalMsg(this.states, this.config, finMsg);
 
         removeReactions(this);
-
         this.states.collector.stop();
     }
 };

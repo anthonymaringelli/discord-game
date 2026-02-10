@@ -41,10 +41,10 @@ export async function storeMsg(game, gameMsg){
 
 export async function editFinalMsg(states, config, newMsg){
     try{
-
+// //////////doesnt work on single sigit numbers?////////////////////////////////////////////////////////
         const bottomSeparator = createSpacer(config.length * config.standatdEmojiWidth);
         
-        let diff = (Math.floor((bottomSeparator.length - (newMsg.length + 2)) / 2));
+        let diff = ((bottomSeparator.length - (newMsg.length + 2)) / 2);
         const left = "#".repeat(Math.floor(diff));
         const right = "#".repeat(Math.ceil(diff));
 

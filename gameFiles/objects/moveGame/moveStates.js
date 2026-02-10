@@ -2,12 +2,15 @@ import { moveData as data } from "./moveData.js"
 import { moveConfig as config } from "./moveConfig.js"
 
 export class moveStates {
-    constructor(channel){
+    constructor(channel, userId, client){
+
             // discord states
         this.channel = channel;
         this.msgObj = null;
         this.msgId = null;
-        this.client = null;
+        this.client = client;
+        this.userId = userId;
+
             // game states
         this.gameBoardArray = new Array(config.length);
         this.applePosition = null;
@@ -18,5 +21,6 @@ export class moveStates {
 
             // master switch
         this.gameActive = true;
+
     }
 };
