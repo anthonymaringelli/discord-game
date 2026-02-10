@@ -1,21 +1,15 @@
 
 
-    // sends initial post w seperator
-export async function initPost(game, gameBoardString) {
-    const separator = createSpacer(game.config.length * game.config.standardEmojiWidth);
 
-    await sendMsg(game.states, separator);
-    const gameMsg = await sendMsg(game.states, gameBoardString);
-    storeMsg(game, gameMsg); 
-};
-
-
-
-    // sends a new post
-export async function sendMsg(states, msg){
+    // sends a new post. if mainpost is true, stores msgId and msgObj
+export async function sendMsg(states, msg, mainPost = false){
     let sentMsg = await states.channel.send(msg);
-    return sentMsg;
+
+    if (mainPost) {
+        storeMsg(states, sentMsg);
+    }
 }
+
 
 
     // edits given msg with given new content
@@ -32,9 +26,9 @@ export async function editMsg(states, newMsg){
 
 
     // sets states msgId and msgObj
-export async function storeMsg(game, gameMsg){ 
-    game.states.msgObj = gameMsg;
-    game.states.msgId = gameMsg.id;
+export async function storeMsg(states, gameMsg){ 
+    states.msgObj = gameMsg;
+    states.msgId = gameMsg.id;
 };
 
 
@@ -61,7 +55,7 @@ export async function editFinalMsg(states, config, newMsg){
 
 
 
-function createSpacer(length){
+export function createSpacer(length){
     const block = "`";
     return `${block}${"#".repeat(length)}${block}`;
 }

@@ -2,7 +2,7 @@ import { moveLogic } from "./moveLogic.js"
 import { moveData } from "./moveData.js"
 import { moveStates } from "./moveStates.js"
 import { moveConfig } from "./moveConfig.js"
-import { initPost, editMsg, editFinalMsg } from "../../msgHelpers.js"
+import { editMsg, sendMsg, editFinalMsg, createSpacer } from "../../msgHelpers.js"
 import { sendReactions, removeReactions } from "../../reactionHelpers.js"
 import { listenForReactions } from "../../reactionListener.js"
 
@@ -21,7 +21,10 @@ export class moveGame {
             // first post
             const gameBoardPositions = await this.logic.genBoard(this.states, Math.floor(Math.random() * this.states.gameBoardArray.length));
             const gameBoardString = await this.logic.stringifyBoard(this.states);
-            await initPost(this, gameBoardString);
+            const separator = createSpacer(this.config.length * this.config.standardEmojiWidth);
+
+            await sendMsg(this.states, separator);
+            await sendMsg(this.states, gameBoardString, true)
 
             // first reactions
             const initReacts = [this.data.leftReact, this.data.rightReact]

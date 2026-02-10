@@ -7,11 +7,10 @@ export const moveLogic = {
 // generates board 
     genBoard(states, newPos) {
         try{
-            // if (states.gameActive === false) return;
+
             this.fillBoard(states.gameBoardArray)
             this.placeChar(states, newPos);
             this.placeApple(states);
-
 
         } catch(error) {
             console.error("[ERROR] genBoard ", error)
@@ -47,7 +46,6 @@ export const moveLogic = {
 // place new apple
     placeApple(states){
     if (states.applePosition === null){
-
         do {
             // pick a random position each iteration
             let position = Math.floor(Math.random() * states.gameBoardArray.length);
@@ -57,9 +55,7 @@ export const moveLogic = {
                 states.applePosition = position;
                 return;
             }
-
         } while (true);
-
     } else {
         // apple already exists, render it in the board
         states.gameBoardArray[states.applePosition] = data.apple;
@@ -139,9 +135,7 @@ export const moveLogic = {
 
 
 
-// PROBLEMS:
-
-// check user reactions
+    // PROBLEMS
 
     // BIGGER
 // major cleanup/ file separation
@@ -150,7 +144,11 @@ export const moveLogic = {
     // class
         // move listener starter?
     // logic
-// extra separators after, reaction on lowest
-// top line of text to update
+// extra separators after, reactions on lowest
+// top line of text to update -- 
+    // text display, will use new sep system
+    // and edit/update system, when stat in states changes, call to update display msg
 
 
+// strategy comes down to amount of effective choices you have available, 
+// more you have, richer the strategy
