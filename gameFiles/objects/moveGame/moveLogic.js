@@ -142,6 +142,9 @@ export const moveLogic = {
 
     // BIGGER
 // major cleanup/ file separation
+    // helpers
+    // class
+    // logic
 // extra separators after, reaction on lowest
 // top line of text to update
 
