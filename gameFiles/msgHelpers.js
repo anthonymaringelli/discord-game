@@ -2,7 +2,7 @@
 
     // sends initial post w seperator
 export async function initPost(game, gameBoardString) {
-    const separator = createSpacer(game.config.length * game.config.standatdEmojiWidth);
+    const separator = createSpacer(game.config.length * game.config.standardEmojiWidth);
 
     await sendMsg(game.states, separator);
     const gameMsg = await sendMsg(game.states, gameBoardString);
@@ -42,7 +42,7 @@ export async function storeMsg(game, gameMsg){
 export async function editFinalMsg(states, config, newMsg){
     try{
 // //////////doesnt work on single sigit numbers?////////////////////////////////////////////////////////
-        const bottomSeparator = createSpacer(config.length * config.standatdEmojiWidth);
+        const bottomSeparator = createSpacer(config.length * config.standardEmojiWidth);
         
         let diff = ((bottomSeparator.length - (newMsg.length + 2)) / 2);
         const left = "#".repeat(Math.floor(diff));
