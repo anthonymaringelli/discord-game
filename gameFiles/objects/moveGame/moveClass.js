@@ -26,10 +26,11 @@ export class moveGame {
             await sendMsg(this.states, separator);
             await sendMsg(this.states, gameBoardString, true, "game")
 
-            for (let x = 0; x < 3; x++) {
-                await sendMsg(this.states, separator);
-            }
-
+    
+            let spacer = "`";
+            let lineBreak = "\n"
+            let testMsg = `${spacer}${separator}${spacer}${lineBreak}${spacer}${separator}${spacer}${lineBreak}${spacer}${separator}${spacer}`;
+            await sendMsg(this.states, testMsg);
 
             // the one we want to store
             await sendMsg(this.states, separator, true, "spacer");

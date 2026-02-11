@@ -38,10 +38,9 @@ export async function editMsg(states, newMsg){
 }
 
 
-
+// split into two funcs, editMsg, splitSpacer
 export async function editFinalMsg(states, config, newMsg){
     try{
-// //////////doesnt work on single sigit numbers?////////////////////////////////////////////////////////
         const bottomSeparator = createSpacer(config.length * config.standardEmojiWidth);
         
         let diff = ((bottomSeparator.length - (newMsg.length + 2)) / 2);
@@ -53,7 +52,7 @@ export async function editFinalMsg(states, config, newMsg){
         const block = "`";
 
         editMsg(states, `${block}${winMsg}${block}`);
-        sendMsg(states, bottomSeparator);  
+        // sendMsg(states, bottomSeparator);  
     } catch (error) {
         console.error("[ERROR] editMsg.js ", error)
     }
