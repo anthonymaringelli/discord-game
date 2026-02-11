@@ -24,14 +24,23 @@ export class moveGame {
             const separator = createSpacer(this.config.length * this.config.standardEmojiWidth);
 
             await sendMsg(this.states, separator);
-            await sendMsg(this.states, gameBoardString, true)
+            await sendMsg(this.states, gameBoardString, true, "game")
+
+            for (let x = 0; x < 3; x++) {
+                await sendMsg(this.states, separator);
+            }
+
+
+            // the one we want to store
+            await sendMsg(this.states, separator, true, "spacer");
 
             // first reactions
             const initReacts = [this.data.leftReact, this.data.rightReact]
-            await sendReactions(this, initReacts);
+            await sendReactions(this, initReacts, "spacer");
+            
 
             // starts reaction listener, sends user reactions -> moveLogic.js -> handleMove()
-            const collector = await listenForReactions(this, this.states.msgId, ({ emoji }) => {
+            const collector = await listenForReactions(this, this.states.spacerId, ({ emoji }) => {
                 this.logic.handleMove(this, emoji);
             });
             this.states.collector = collector;
@@ -56,7 +65,7 @@ export class moveGame {
         const finMsg = ` You won in ${this.states.moveCount} moves! `;
         editFinalMsg(this.states, this.config, finMsg);
 
-        removeReactions(this);
+        removeReactions(this, "spacer");
         this.states.collector.stop();
     }
 };

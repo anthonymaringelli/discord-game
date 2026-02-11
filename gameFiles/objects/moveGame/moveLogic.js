@@ -40,8 +40,8 @@ export const moveLogic = {
         states.charPosition = position;
 
     },
-   
-    
+
+
 
 // place new apple
     placeApple(states){
@@ -64,48 +64,36 @@ export const moveLogic = {
 
 
 
-// func for: if x reaction, check if possible, then if possible do function y(regen gameboard in specific way)
-    handleMove(game, move){
-         if (game.states.isActive === false) return;
-        this.moveSelected(game, move);
-    },
-
-
-
 // check if move possible, check if its a point, make the move
-    moveSelected(game, move){
+    handleMove(game, move){
 
-            // get new move, check if possible
+                // get new move index, check if possible
         const direction = this.getDelta(move);
         const newPos = game.states.charPosition + direction;
-        if (!this.movePossible(game, newPos)){
-             return;
-        };     
+        if (!this.movePossible(game, newPos)) return;
+             
         game.states.charPosition = newPos;
 
-                // set new char indx
-            this.placeChar(game.states, game.states.charPosition);
-                // track moves
-            this.moveCounter(game)
+        this.placeChar(game.states, game.states.charPosition);
+        this.moveCounter(game)
 
                 // check if on apple
-            if (game.states.charPosition === game.states.applePosition) {
+        if (game.states.charPosition === game.states.applePosition) {
                 game.states.points ++;
                 console.log("Point scored! Total points: ", game.states.points);
-                    // check if win
+
                 this.winCheck(game, game.states.points);
-                    // regen apple
                 game.states.applePosition = null;
                 this.placeApple(game.states);
-            }
+        }
 
-                // regen board positions
-            this.genBoard(game.states, newPos);
-                // new board string
-            const newBoard = this.stringifyBoard(game.states);
+        this.genBoard(game.states, newPos);
+        const stringBoard = this.stringifyBoard(game.states);
+
                 // send new board to editMsg
-            game.sendToEdit(newBoard);
+        game.sendToEdit(stringBoard);
     },
+
 
 
 // func for move change
@@ -127,7 +115,7 @@ export const moveLogic = {
 
 // sends win msg if meets win condition 
     winCheck(game, points){
-        if (points >= 2){            
+        if (points >= game.config.winCondition){            
             game.endGame();     
         };
     }
@@ -141,8 +129,6 @@ export const moveLogic = {
 // major cleanup/ file separation
     // helpers
         // fix spacer thing
-    // class
-        // move listener starter?
     // logic
 // extra separators after, reactions on lowest
 // top line of text to update -- 

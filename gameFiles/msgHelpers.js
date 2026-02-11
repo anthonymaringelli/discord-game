@@ -2,34 +2,40 @@
 
 
     // sends a new post. if mainpost is true, stores msgId and msgObj
-export async function sendMsg(states, msg, mainPost = false){
+export async function sendMsg(states, msg, storePost=false, storeType=null){
     let sentMsg = await states.channel.send(msg);
 
-    if (mainPost) {
-        storeMsg(states, sentMsg);
-    }
-}
-
-
-
-    // edits given msg with given new content
-export async function editMsg(states, newMsg){
-    try{
-        const message = await states.channel.messages.fetch(states.msgId);
-        const editedMessage = await message.edit(newMsg);
-
-    } catch (error) {
-        console.error("[ERROR] editMsg.js ", error)
+    if (storePost) {
+        storeMsg(states, sentMsg, storeType);
     }
 }
 
 
 
     // sets states msgId and msgObj
-export async function storeMsg(states, gameMsg){ 
-    states.msgObj = gameMsg;
-    states.msgId = gameMsg.id;
+export async function storeMsg(states, gameMsg, storeType){ 
+    if (storeType === "game") {
+        states.gameMsgObj = gameMsg;
+        states.gameMsgId = gameMsg.id;
+    } else if (storeType === "spacer") {
+        states.spacerObj = gameMsg;
+        states.spacerId = gameMsg.id;
+    } 
+ 
 };
+
+
+
+    // edits given msg with given new content
+export async function editMsg(states, newMsg){
+    try{
+        const message = await states.channel.messages.fetch(states.gameMsgId);
+        const editedMessage = await message.edit(newMsg);
+
+    } catch (error) {
+        console.error("[ERROR] editMsg.js ", error)
+    }
+}
 
 
 

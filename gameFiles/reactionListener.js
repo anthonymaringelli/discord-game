@@ -16,10 +16,10 @@ export async function listenForReactions(game, messageId, onReact) {
                 return [game.data.leftReact, game.data.rightReact].includes(reaction.emoji.name); 
         };
 
-                // discord.js message object,,, collect filtered reactions, do it for 20 mins
+                // discord.js message object,,, collect filtered reactions, do it for 4 mins
         const collector = message.createReactionCollector({
                 filter,
-                time: 1200_000 // 20 minutes
+                time: 240_000 // 4 minutes
         });
 
         collector.on("collect", async (reaction, user) => {
