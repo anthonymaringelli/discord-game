@@ -21,7 +21,7 @@ export async function storeMsg(states, message, msgType) {
 
 
     // edits given msg with given new content
-export async function editMsg(states, newMsg, msgType="game"){
+export async function editMsg(states, newMsg, msgType=null){
     try{
         const editedMessage = await states.messages[msgType].obj.edit(newMsg);
         states.messages[msgType].obj = editedMessage;
@@ -33,11 +33,11 @@ export async function editMsg(states, newMsg, msgType="game"){
 
 
 // split into two funcs, editMsg, splitSpacer
-export async function editFinalMsg(states, config, newMsg){
+export async function editFinalMsg(states, config, newMsg, msgType){
     try{
         const bottomSeparator = createSpacer(config.length * config.standardEmojiWidth);
 
-        editMsg(states, constructSpacerMsg(newMsg, config));
+        editMsg(states, constructSpacerMsg(newMsg, config), msgType);
 
         // sendMsg(states, bottomSeparator);  
     } catch (error) {

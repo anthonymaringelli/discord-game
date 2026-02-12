@@ -9,12 +9,11 @@ export class moveStates {
         this.client = client;
         this.userId = userId;
 
-            // msg ids and objects
+            // msg objects(objs)/// objs.id contains ids
         this.messages = {
                 game: null,
                 spacer: null,
                 textLine: null
-                
         };
         
             // game states

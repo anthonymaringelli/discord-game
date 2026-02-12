@@ -53,13 +53,13 @@ export class moveGame {
 
     updateSpacerText(moveCount, points) {
         const newText = ` Moves: ${moveCount}, Points: ${points} `;
-        editMsg(this.states, constructSpacerMsg(newText, this.config));
+        editMsg(this.states, constructSpacerMsg(newText, this.config), "textLine");
     }
 
     // updates the board
     sendToEdit(newBoard){
         if (this.states.gameActive === false) return;
-        editMsg(this.states, newBoard);
+        editMsg(this.states, newBoard, "game");
     }
 
 
@@ -68,7 +68,7 @@ export class moveGame {
         this.states.gameActive = false;
 
         const finMsg = ` You won in ${this.states.moveCount} moves! `;
-        editFinalMsg(this.states, this.config, finMsg);
+        editFinalMsg(this.states, this.config, finMsg, "game");
 
         removeReactions(this, "spacer");
         this.states.collector.stop();
