@@ -2,7 +2,7 @@ import { moveLogic } from "./moveLogic.js"
 import { moveData } from "./moveData.js"
 import { moveStates } from "./moveStates.js"
 import { moveConfig } from "./moveConfig.js"
-import { editMsg, sendMsg, editFinalMsg, createSpacer } from "../../msgHelpers.js"
+import { editMsg, sendMsg, editFinalMsg, createSpacer, constructSpacerMsg } from "../../msgHelpers.js"
 import { sendReactions, removeReactions } from "../../reactionHelpers.js"
 import { listenForReactions } from "../../reactionListener.js"
 
@@ -23,17 +23,17 @@ export class moveGame {
             const gameBoardString = await this.logic.stringifyBoard(this.states);
             const separator = createSpacer(this.config.length * this.config.standardEmojiWidth);
 
+            let TESTMSG = ` Moves: ${this.states.moveCount}, Points: ${this.states.points} `
             await sendMsg(this.states, separator);
-            await sendMsg(this.states, gameBoardString, true, "game")
+            await sendMsg(this.states, constructSpacerMsg(TESTMSG, this.config), "textLine");
+            await sendMsg(this.states, gameBoardString, "game")
 
     
             let spacer = "`";
             let lineBreak = "\n"
-            let testMsg = `${spacer}${separator}${spacer}${lineBreak}${spacer}${separator}${spacer}${lineBreak}${spacer}${separator}${spacer}`;
-            await sendMsg(this.states, testMsg);
+            let testMsg = `${spacer}${separator}${spacer}${lineBreak}${spacer}${separator}${spacer}${lineBreak}${spacer}${separator}${spacer}${lineBreak}${spacer}${separator}${spacer}`;
+            await sendMsg(this.states, testMsg, "spacer");
 
-            // the one we want to store
-            await sendMsg(this.states, separator, true, "spacer");
 
             // first reactions
             const initReacts = [this.data.leftReact, this.data.rightReact]
@@ -41,7 +41,7 @@ export class moveGame {
             
 
             // starts reaction listener, sends user reactions -> moveLogic.js -> handleMove()
-            const collector = await listenForReactions(this, this.states.spacerId, ({ emoji }) => {
+            const collector = await listenForReactions(this, "spacer", ({ emoji }) => {
                 this.logic.handleMove(this, emoji);
             });
             this.states.collector = collector;
@@ -51,6 +51,10 @@ export class moveGame {
         }
     }
 
+    updateSpacerText(moveCount, points) {
+        const newText = ` Moves: ${moveCount}, Points: ${points} `;
+        editMsg(this.states, constructSpacerMsg(newText, this.config));
+    }
 
     // updates the board
     sendToEdit(newBoard){

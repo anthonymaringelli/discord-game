@@ -2,34 +2,29 @@
 
 
     // sends a new post. if mainpost is true, stores msgId and msgObj
-export async function sendMsg(states, msg, storePost=false, storeType=null){
+export async function sendMsg(states, msg, storeType=null){
     let sentMsg = await states.channel.send(msg);
 
-    if (storePost) {
-        storeMsg(states, sentMsg, storeType);
+    if (storeType) {
+        await storeMsg(states, sentMsg, storeType);
     }
 }
 
 
 
     // sets states msgId and msgObj
-export async function storeMsg(states, gameMsg, storeType){ 
-    if (storeType === "game") {
-        states.gameMsgObj = gameMsg;
-        states.gameMsgId = gameMsg.id;
-    } else if (storeType === "spacer") {
-        states.spacerObj = gameMsg;
-        states.spacerId = gameMsg.id;
-    } 
- 
-};
-
+export async function storeMsg(states, message, storeType) {
+    states.messages[storeType] = {
+        obj: message,
+        id: message.id
+    };
+}
 
 
     // edits given msg with given new content
-export async function editMsg(states, newMsg){
+export async function editMsg(states, newMsg, type="game"){
     try{
-        const message = await states.channel.messages.fetch(states.gameMsgId);
+        const message = await states.channel.messages.fetch(states.messages[type].id);
         const editedMessage = await message.edit(newMsg);
 
     } catch (error) {
@@ -42,16 +37,9 @@ export async function editMsg(states, newMsg){
 export async function editFinalMsg(states, config, newMsg){
     try{
         const bottomSeparator = createSpacer(config.length * config.standardEmojiWidth);
-        
-        let diff = ((bottomSeparator.length - (newMsg.length + 2)) / 2);
-        const left = "#".repeat(Math.floor(diff));
-        const right = "#".repeat(Math.ceil(diff));
 
+        editMsg(states, constructSpacerMsg(newMsg, config));
 
-        let winMsg = `${left}${newMsg}${right}`;
-        const block = "`";
-
-        editMsg(states, `${block}${winMsg}${block}`);
         // sendMsg(states, bottomSeparator);  
     } catch (error) {
         console.error("[ERROR] editMsg.js ", error)
@@ -65,9 +53,21 @@ export function createSpacer(length){
     return `${block}${"#".repeat(length)}${block}`;
 }
 
-function splitSpacer(spacer, msg){
-};
 
+
+export function constructSpacerMsg(msg, config){
+
+    const spacerLength = config.length * config.standardEmojiWidth + 2;
+    let diff = ((spacerLength - (msg.length + 2)) / 2);
+
+    const left = "#".repeat(Math.floor(diff));
+    const right = "#".repeat(Math.ceil(diff));
+    const block = "`";
+
+    let returnMsg = `${block}${left}${msg}${right}${block}`;
+
+    return returnMsg;
+}
 
 // FUTURE:
 // connect final spacer to reactions, connect its reactions to the game board

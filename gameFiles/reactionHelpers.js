@@ -1,25 +1,25 @@
 
     // sends reactions to specified msg object
 export async function sendReactions(game, reacts, msgType) {
-    let msgObj = null;
-    if (msgType === "game") {
-        for (const r of reacts) {
-            await game.states.gameMsgObj.react(r);
-       }
-    } else if (msgType === "spacer") {
-        for (const r of reacts) {
-            await game.states.spacerObj.react(r);
-       }
+
+    const container = game.states.messages[msgType];
+
+    if (!container?.obj) {
+        console.error("[sendRactions] Message not found for:", msgType);
+        return;
     }
 
+    const msgObj = container.obj;
+
+    for (const r of reacts) {
+        await msgObj.react(r);
+    }
 
 }
 
     // removes reactions from specified msg object
 export function removeReactions(game, msgType){
-    if (msgType === "game") {
-        game.states.gameMsgObj.reactions.removeAll();
-    } else if (msgType === "spacer") {
-        game.states.spacerObj.reactions.removeAll();
-    }
+    
+        game.states.messages[msgType].obj.reactions.removeAll();
+    
 }

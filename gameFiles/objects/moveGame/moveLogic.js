@@ -91,6 +91,7 @@ export const moveLogic = {
         const stringBoard = this.stringifyBoard(game.states);
 
                 // send new board to editMsg
+        game.updateSpacerText(game.states.moveCount, game.states.points);
         game.sendToEdit(stringBoard);
     },
 
@@ -128,7 +129,7 @@ export const moveLogic = {
     // BIGGER
 // major cleanup/ file separation
     // helpers
-        // fix spacer thing
+        // fix spacer thing split editFinalmsg into smaller funcs
     // logic
 // extra separators after, reactions on lowest
 // top line of text to update -- 

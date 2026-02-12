@@ -6,13 +6,17 @@ export class moveStates {
 
             // discord states
         this.channel = channel;
-        this.gameMsgObj = null;
-        this.gameMsgId = null;
-        this.spacerObj = null;
-        this.spacerId = null;
         this.client = client;
         this.userId = userId;
 
+            // msg ids and objects
+        this.messages = {
+                game: null,
+                spacer: null,
+                textLine: null
+                
+        };
+        
             // game states
         this.gameBoardArray = new Array(config.length);
         this.applePosition = null;
