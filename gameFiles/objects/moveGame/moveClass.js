@@ -2,7 +2,7 @@ import { moveLogic } from "./moveLogic.js"
 import { moveData } from "./moveData.js"
 import { moveStates } from "./moveStates.js"
 import { moveConfig } from "./moveConfig.js"
-import { editMsg, sendMsg, editFinalMsg, createSpacer, constructSpacerMsg } from "../../msgHelpers.js"
+import { editMsg, sendMsg, editFinalMsg, createSpacer, constructSpacerMsg, constructMsg } from "../../msgHelpers.js"
 import { sendReactions, removeReactions } from "../../reactionHelpers.js"
 import { listenForReactions } from "../../reactionListener.js"
 
@@ -25,7 +25,7 @@ export class moveGame {
 
             let TESTMSG = ` Moves: ${this.states.moveCount}, Points: ${this.states.points} `
             await sendMsg(this.states, separator);
-            await sendMsg(this.states, constructSpacerMsg(TESTMSG, this.config), "textLine");
+            // await sendMsg(this.states, constructSpacerMsg(TESTMSG, this.config), "textLine");
             await sendMsg(this.states, gameBoardString, "game")
 
     
@@ -34,6 +34,8 @@ export class moveGame {
             let testMsg = `${spacer}${separator}${spacer}${lineBreak}${spacer}${separator}${spacer}${lineBreak}${spacer}${separator}${spacer}${lineBreak}${spacer}${separator}${spacer}`;
             await sendMsg(this.states, testMsg, "spacer");
 
+            // const fullMsg = await constructMsg(separator, TESTMSG, gameBoardString, testMsg);
+            // await sendMsg(this.states, fullMsg, "game");
 
             // first reactions
             const initReacts = [this.data.leftReact, this.data.rightReact]

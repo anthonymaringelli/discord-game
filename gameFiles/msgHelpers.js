@@ -27,7 +27,7 @@ export async function editMsg(states, newMsg, msgType=null){
         states.messages[msgType].obj = editedMessage;
 
     } catch (error) {
-        console.error("[ERROR] editMsg.js ", error)
+        console.error("[EditMsg] error ", error)
     }
 }
 
@@ -66,6 +66,11 @@ export function constructSpacerMsg(msg, config){
     let returnMsg = `${block}${left}${msg}${right}${block}`;
 
     return returnMsg;
+}
+
+export async function constructMsg(...msgs){
+    // send each msg, returns a string that has all msgs separated by line break
+    return msgs.join("\n");
 }
 
 // FUTURE:

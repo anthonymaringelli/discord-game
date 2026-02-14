@@ -11,9 +11,9 @@ export async function sendReactions(game, reacts, msgType) {
 
     const msgObj = container.obj;
 
-    for (const r of reacts) {
-        await msgObj.react(r);
-    }
+
+    await Promise.all(reacts.map(r => msgObj.react(r)));
+
 
 }
 

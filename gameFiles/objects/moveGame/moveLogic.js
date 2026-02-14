@@ -91,7 +91,7 @@ export const moveLogic = {
         const stringBoard = this.stringifyBoard(game.states);
 
                 // send new board to editMsg
-        game.updateSpacerText(game.states.moveCount, game.states.points);
+        // game.updateSpacerText(game.states.moveCount, game.states.points);
         game.sendToEdit(stringBoard);
     },
 
@@ -123,19 +123,23 @@ export const moveLogic = {
 };
 
 
+// FIXES:
+    // change to edit one msg
+    // test buttons instead of reactions, less api calls, more responsive, more intuitive for users, cleaner interface
 
-    // PROBLEMS
 
-    // BIGGER
-// major cleanup/ file separation
-    // helpers
-        // fix spacer thing split editFinalmsg into smaller funcs
-    // logic
-// extra separators after, reactions on lowest
-// top line of text to update -- 
-    // text display, will use new sep system
-    // and edit/update system, when stat in states changes, call to update display msg
-
+ 
 
 // strategy comes down to amount of effective choices you have available, 
 // more you have, richer the strategy
+
+
+// optimizing to work around discords api ratelimits, can only request so often
+    // edit, send, delete, react, delete react, fetch, are all api requests
+        // edit ONE message
+        // await Promise.all(reacts.map(r => msg.react(r))); -- react all at once
+        // delete reactions all at once - or just leave them all
+        // dont delete messages
+        // AVOID EXCESSIVE FETCHING
+        // use buttons???? instead of reactions
+
