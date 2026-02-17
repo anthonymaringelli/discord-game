@@ -11,9 +11,21 @@ export class moveStates {
 
             // msg objects(objs)/// objs.id contains ids
         this.messages = {
-                game: null,
+                game: {
+                    obj: null,
+                    params: {
+
+                    }
+                },
+                
                 spacer: null,
-                textLine: null
+
+                textLine: {
+                        obj: null,
+                        params: {
+                                length: config.length * config.standardEmojiWidth + 2,
+                        }
+                }
         };
         
             // game states

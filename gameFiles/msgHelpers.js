@@ -75,4 +75,3 @@ export async function constructMsg(...msgs){
 
 // FUTURE:
 // connect final spacer to reactions, connect its reactions to the game board
-// text in middle of spacers function

@@ -5,6 +5,7 @@ import { moveConfig } from "./moveConfig.js"
 import { editMsg, sendMsg, editFinalMsg, createSpacer, constructSpacerMsg, constructMsg } from "../../msgHelpers.js"
 import { sendReactions, removeReactions } from "../../reactionHelpers.js"
 import { listenForReactions } from "../../reactionListener.js"
+import { createGameButtons } from "../../buttonHelpers.js"
 
 
 export class moveGame {
@@ -25,8 +26,8 @@ export class moveGame {
 
             let TESTMSG = ` Moves: ${this.states.moveCount}, Points: ${this.states.points} `
             await sendMsg(this.states, separator);
-            // await sendMsg(this.states, constructSpacerMsg(TESTMSG, this.config), "textLine");
-            await sendMsg(this.states, gameBoardString, "game")
+            await sendMsg(this.states, constructSpacerMsg(TESTMSG, this.config), "textLine");
+            // await sendMsg(this.states, gameBoardString, "game")
 
     
             let spacer = "`";
@@ -38,9 +39,17 @@ export class moveGame {
             // await sendMsg(this.states, fullMsg, "game");
 
             // first reactions
-            const initReacts = [this.data.leftReact, this.data.rightReact]
-            await sendReactions(this, initReacts, "spacer");
-            
+            // const initReacts = [this.data.leftReact, this.data.rightReact]
+            // await sendReactions(this, initReacts, "spacer");
+            const row = createGameButtons(this);
+
+            const sentMsg = await this.states.channel.send({
+            content: gameBoardString,
+            components: [row]
+            });
+
+            this.states.messages.game = sentMsg;
+
 
             // starts reaction listener, sends user reactions -> moveLogic.js -> handleMove()
             const collector = await listenForReactions(this, "spacer", ({ emoji }) => {

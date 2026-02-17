@@ -91,8 +91,9 @@ export const moveLogic = {
         const stringBoard = this.stringifyBoard(game.states);
 
                 // send new board to editMsg
-        // game.updateSpacerText(game.states.moveCount, game.states.points);
+        game.updateSpacerText(game.states.moveCount, game.states.points);
         game.sendToEdit(stringBoard);
+
     },
 
 
@@ -125,8 +126,19 @@ export const moveLogic = {
 
 // FIXES:
     // change to edit one msg
+        // edit msg
+        // save so we can edit later
+        //  glue all msgs together, then send
+        
     // test buttons instead of reactions, less api calls, more responsive, more intuitive for users, cleaner interface
 
+    // I want a way to automatically connect a msg with a saved object to the 
+    // msg editor at the end of a user reaction
+        // checks if update: true,
+        // if true, get params,
+        // re edit msg from save,
+        // reglue together w other msgs
+        // edit main msg with new reglued msg
 
  
 
@@ -142,4 +154,5 @@ export const moveLogic = {
         // dont delete messages
         // AVOID EXCESSIVE FETCHING
         // use buttons???? instead of reactions
+        // design game around it, few impactful updates
 
