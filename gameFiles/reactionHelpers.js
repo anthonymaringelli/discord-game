@@ -11,7 +11,7 @@ export async function sendReactions(game, reacts, msgType) {
 
     const msgObj = container.obj;
 
-
+    // sending all reacts at once, fewer requests
     await Promise.all(reacts.map(r => msgObj.react(r)));
 
 

@@ -65,11 +65,13 @@ export const moveLogic = {
 
 
 // check if move possible, check if its a point, make the move
-    handleMove(game, move){
+    handleMove(game, move, msgType=null){
         console.log("Recieved")
 
                 // get new move index, check if possible
-        const direction = this.getDelta(move);
+        // const direction = this.getDelta(move);
+        const direction = move === "left" ? -1 : 1;
+
         const newPos = game.states.charPosition + direction;
         if (!this.movePossible(game, newPos)) return;
              
@@ -93,7 +95,7 @@ export const moveLogic = {
 
                 // send new board to editMsg
         game.updateSpacerText(game.states.moveCount, game.states.points);
-        game.sendToEdit(stringBoard);
+        game.sendToEdit(stringBoard, msgType);
 
     },
 
@@ -130,10 +132,12 @@ export const moveLogic = {
         // edit msg
         // save so we can edit later
         //  glue all msgs together, then send
-        
-    // test buttons instead of reactions, less api calls, more responsive, more intuitive for users, cleaner interface
+    // make buttonHelpers.js more dynamic, not hard coded buttons but from (game)Data.js
+    // make handleMoves() automatically get which msgs need to be edited
+    // clean up round
+    // make handleMoves() respond to buttons
+    // update getDelta()?
 
-    // I want a way to automatically connect a msg with a saved object to the 
     // msg editor at the end of a user reaction
         // checks if update: true,
         // if true, get params,

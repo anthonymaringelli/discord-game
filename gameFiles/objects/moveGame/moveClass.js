@@ -91,9 +91,14 @@ export class moveGame {
 
 
     // updates the board
-    sendToEdit(newBoard){
+    sendToEdit(newBoard, msgType=null){
         if (this.states.gameActive === false) return;
+        if (msgType === "gameReact"){
         editMsg(this.states, newBoard, "gameReact");
+    } else {
+        editMsg(this.states, newBoard, "gameButton");
+
+    }
     }
 
 

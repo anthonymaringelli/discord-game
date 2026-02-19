@@ -27,10 +27,11 @@ export async function listenForReactions(game, reactMsgType, sendToLogic) {
                     if (reaction.partial) await reaction.fetch();
                 
                         // forward reaction to the provided callback
-                    await sendToLogic({
-                        emoji: reaction.emoji.name,
-                        user,
-                    });
+                    // await sendToLogic({
+                    //     emoji: reaction.emoji.name,
+                    //     user,
+                    // });
+                    await sendToLogic(reaction.emoji.name === "⬅️" ? "left" : "right", "gameReact");
 
                     // remove user's reaction so they can press again
                     await reaction.users.remove(user.id).catch(() => {});
@@ -62,11 +63,9 @@ export async function listenForButtons(game, reactMsgType) {
     const collector = message.createMessageComponentCollector({
         time: 240_000
     });
-    console.log("ONE")
 
     collector.on("collect", async (interaction) => {
         try {
-            console.log("INTERACTIONS")
             if (interaction.user.id !== game.states.userId) {
                 return interaction.reply({
                     content: "Not your game!",
@@ -77,8 +76,10 @@ export async function listenForButtons(game, reactMsgType) {
             await interaction.deferUpdate();
 
             console.log("sending move, ", interaction.customId)
+            const move = interaction.customId === "move_left_undefined" ? "left":"right"
+            // ONLY SENDING LEFT
             // Forward only what logic needs
-            game.logic.handleMove(game, interaction.customId);
+            game.logic.handleMove(game, move, "gameButton");
 
         } catch (err) {
             console.error("[Button Collector Error]", err);
