@@ -1,7 +1,7 @@
 
 
         // listens for specific reactions, sends them to moveClass.js
-export async function listenForReactions(game, reactMsgType, onReact) {
+export async function listenForReactions(game, reactMsgType, sendToLogic) {
          if (game.states.isActive === false) {
                 console.log("Game is not active, not starting reaction listener");
                 return;}
@@ -26,9 +26,9 @@ export async function listenForReactions(game, reactMsgType, onReact) {
                  try {
                         // make sure full reaction, not partials
                     if (reaction.partial) await reaction.fetch();
-
+                
                         // forward reaction to the provided callback
-                    await onReact({
+                    await sendToLogic({
                         emoji: reaction.emoji.name,
                         user,
                     });

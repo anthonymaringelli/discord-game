@@ -27,7 +27,7 @@ export class moveGame {
             let TESTMSG = ` Moves: ${this.states.moveCount}, Points: ${this.states.points} `
             await sendMsg(this.states, separator);
             await sendMsg(this.states, constructSpacerMsg(TESTMSG, this.config), "textLine");
-            // await sendMsg(this.states, gameBoardString, "game")
+            await sendMsg(this.states, gameBoardString, "game")
 
     
             let spacer = "`";
@@ -39,33 +39,52 @@ export class moveGame {
             // await sendMsg(this.states, fullMsg, "game");
 
             // first reactions
-            // const initReacts = [this.data.leftReact, this.data.rightReact]
-            // await sendReactions(this, initReacts, "spacer");
-            const row = createGameButtons(this);
-
-            const sentMsg = await this.states.channel.send({
-            content: gameBoardString,
-            components: [row]
-            });
-
-            this.states.messages.game = sentMsg;
+            const initReacts = [this.data.leftReact, this.data.rightReact]
+            await sendReactions(this, initReacts, "spacer");
 
 
-            // starts reaction listener, sends user reactions -> moveLogic.js -> handleMove()
-            const collector = await listenForReactions(this, "spacer", ({ emoji }) => {
-                this.logic.handleMove(this, emoji);
-            });
+
+            const sendToLogic = ({emoji}) => {
+                this.logic.handleMove(this, emoji)
+            };
+
+
+            // // buttons
+            // const row = createGameButtons(this);
+
+            // const sentMsg = await this.states.channel.send({
+            // content: gameBoardString,
+            // components: [row]
+            // });
+            // // await sendMsg(this.states, sentMsg, "game")
+
+            // this.states.messages.game = sentMsg;
+            
+
+
+            // reactions
+            const collector = await listenForReactions(this, "spacer", sendToLogic);
             this.states.collector = collector;
+
+            // const collector = await listenForReactions(this, "spacer", ({ emoji }) => {
+            //     this.logic.handleMove(this, emoji);
+            // });
+            // this.states.collector = collector;
+            
 
         } catch (error) {
             console.error("[ERROR] moveGame start(), ", error)
         }
     }
 
+
+
     updateSpacerText(moveCount, points) {
         const newText = ` Moves: ${moveCount}, Points: ${points} `;
         editMsg(this.states, constructSpacerMsg(newText, this.config), "textLine");
     }
+
+
 
     // updates the board
     sendToEdit(newBoard){
@@ -74,6 +93,7 @@ export class moveGame {
     }
 
 
+    
     // ends collector, sends final msg, removes reactions
     endGame() {
         this.states.gameActive = false;
