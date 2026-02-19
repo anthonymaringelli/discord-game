@@ -1,6 +1,5 @@
 
-
-        // listens for specific reactions, sends them to moveClass.js
+// REACTION LISTENER
 export async function listenForReactions(game, reactMsgType, sendToLogic) {
          if (game.states.isActive === false) {
                 console.log("Game is not active, not starting reaction listener");
@@ -47,4 +46,48 @@ export async function listenForReactions(game, reactMsgType, sendToLogic) {
         
         return collector;
 
+}
+
+
+
+
+
+// BUTTON LISTENER
+export async function listenForButtons(game, reactMsgType) {
+
+    const message = game.states.messages[reactMsgType].obj;
+
+    if (game.states.isActive === false) return;
+
+    const collector = message.createMessageComponentCollector({
+        time: 240_000
+    });
+    console.log("ONE")
+
+    collector.on("collect", async (interaction) => {
+        try {
+            console.log("INTERACTIONS")
+            if (interaction.user.id !== game.states.userId) {
+                return interaction.reply({
+                    content: "Not your game!",
+                    ephemeral: true
+                });
+            }
+
+            await interaction.deferUpdate();
+
+            console.log("sending move, ", interaction.customId)
+            // Forward only what logic needs
+            game.logic.handleMove(game, interaction.customId);
+
+        } catch (err) {
+            console.error("[Button Collector Error]", err);
+        }
+    });
+
+    collector.on("end", () => {
+        console.log("Button collector ended");
+    });
+
+    return collector;
 }

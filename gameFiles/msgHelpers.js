@@ -13,9 +13,10 @@ export async function sendMsg(states, msg, msgType=null){
 
 
     // sets states "type": Obj
-export async function storeMsg(states, message, msgType) {
+export async function storeMsg(states, sentMsg, msgType) {
+    // console.log("storing, ", msgType, sentMsg);
     states.messages[msgType] = {
-        obj: message,
+        obj: sentMsg,
     };
 }
 

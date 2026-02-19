@@ -4,7 +4,7 @@ import { moveStates } from "./moveStates.js"
 import { moveConfig } from "./moveConfig.js"
 import { editMsg, sendMsg, editFinalMsg, createSpacer, constructSpacerMsg, constructMsg } from "../../msgHelpers.js"
 import { sendReactions, removeReactions } from "../../reactionHelpers.js"
-import { listenForReactions } from "../../reactionListener.js"
+import { listenForReactions, listenForButtons } from "../../moveListeners.js"
 import { createGameButtons } from "../../buttonHelpers.js"
 
 
@@ -27,7 +27,7 @@ export class moveGame {
             let TESTMSG = ` Moves: ${this.states.moveCount}, Points: ${this.states.points} `
             await sendMsg(this.states, separator);
             await sendMsg(this.states, constructSpacerMsg(TESTMSG, this.config), "textLine");
-            await sendMsg(this.states, gameBoardString, "game")
+            await sendMsg(this.states, gameBoardString, "gameReact")
 
     
             let spacer = "`";
@@ -50,21 +50,25 @@ export class moveGame {
 
 
             // // buttons
-            // const row = createGameButtons(this);
+            const row = createGameButtons(this);
 
             // const sentMsg = await this.states.channel.send({
             // content: gameBoardString,
             // components: [row]
             // });
-            // // await sendMsg(this.states, sentMsg, "game")
+            const sentMsg = {
+                content: gameBoardString,
+                components: [row]    
+            }
+            await sendMsg(this.states, sentMsg, "gameButton")
 
-            // this.states.messages.game = sentMsg;
             
+            listenForButtons(this, "gameButton")
 
 
             // reactions
-            const collector = await listenForReactions(this, "spacer", sendToLogic);
-            this.states.collector = collector;
+            const reactionCollector = await listenForReactions(this, "spacer", sendToLogic);
+            this.states.reactionCollector = reactionCollector;
 
             // const collector = await listenForReactions(this, "spacer", ({ emoji }) => {
             //     this.logic.handleMove(this, emoji);
@@ -89,19 +93,19 @@ export class moveGame {
     // updates the board
     sendToEdit(newBoard){
         if (this.states.gameActive === false) return;
-        editMsg(this.states, newBoard, "game");
+        editMsg(this.states, newBoard, "gameReact");
     }
 
 
     
-    // ends collector, sends final msg, removes reactions
+    // ends reaction collector, sends final msg, removes reactions
     endGame() {
         this.states.gameActive = false;
 
         const finMsg = ` You won in ${this.states.moveCount} moves! `;
-        editFinalMsg(this.states, this.config, finMsg, "game");
+        editFinalMsg(this.states, this.config, finMsg, "gameReact");
 
         removeReactions(this, "spacer");
-        this.states.collector.stop();
+        this.states.reactionCollector.stop();
     }
 };

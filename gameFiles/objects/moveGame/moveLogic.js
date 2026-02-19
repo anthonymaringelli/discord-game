@@ -66,6 +66,7 @@ export const moveLogic = {
 
 // check if move possible, check if its a point, make the move
     handleMove(game, move){
+        console.log("Recieved")
 
                 // get new move index, check if possible
         const direction = this.getDelta(move);
