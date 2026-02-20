@@ -1,6 +1,6 @@
 
 // REACTION LISTENER
-export async function listenForReactions(game, reactMsgType, sendToLogic) {
+export async function listenForReactions(game, reactMsgType) {
          if (game.states.isActive === false) {
                 console.log("Game is not active, not starting reaction listener");
                 return;}
@@ -26,12 +26,10 @@ export async function listenForReactions(game, reactMsgType, sendToLogic) {
                         // make sure full reaction, not partials
                     if (reaction.partial) await reaction.fetch();
                 
-                        // forward reaction to the provided callback
-                    // await sendToLogic({
-                    //     emoji: reaction.emoji.name,
-                    //     user,
-                    // });
-                    await sendToLogic(reaction.emoji.name === "⬅️" ? "left" : "right", "gameReact");
+
+                    console.log("reaction, ", reaction.emoji.name)
+                    const move = reaction.emoji.name === "⬅️" ? "left" : "right";
+                    game.logic.handleMove(game, move, "gameReact");
 
                     // remove user's reaction so they can press again
                     await reaction.users.remove(user.id).catch(() => {});
@@ -76,7 +74,7 @@ export async function listenForButtons(game, reactMsgType) {
             await interaction.deferUpdate();
 
             console.log("sending move, ", interaction.customId)
-            const move = interaction.customId === "move_left_undefined" ? "left":"right"
+            const move = interaction.customId === "move_left_undefined" ? "left":"right";
             // ONLY SENDING LEFT
             // Forward only what logic needs
             game.logic.handleMove(game, move, "gameButton");

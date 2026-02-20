@@ -39,23 +39,12 @@ export class moveGame {
             // await sendMsg(this.states, fullMsg, "game");
 
             // first reactions
-            const initReacts = [this.data.leftReact, this.data.rightReact]
-            await sendReactions(this, initReacts, "spacer");
-
-
-
-            const sendToLogic = ({emoji}) => {
-                this.logic.handleMove(this, emoji)
-            };
+            await sendReactions(this, this.data.initials, "spacer");
 
 
             // // buttons
             const row = createGameButtons(this);
 
-            // const sentMsg = await this.states.channel.send({
-            // content: gameBoardString,
-            // components: [row]
-            // });
             const sentMsg = {
                 content: gameBoardString,
                 components: [row]    
@@ -67,7 +56,7 @@ export class moveGame {
 
 
             // reactions
-            const reactionCollector = await listenForReactions(this, "spacer", sendToLogic);
+            const reactionCollector = await listenForReactions(this, "spacer");
             this.states.reactionCollector = reactionCollector;
 
             // const collector = await listenForReactions(this, "spacer", ({ emoji }) => {
@@ -89,16 +78,17 @@ export class moveGame {
     }
 
 
-
+// /////////////////////////////////////////
     // updates the board
     sendToEdit(newBoard, msgType=null){
+
         if (this.states.gameActive === false) return;
+        console.log(msgType)
         if (msgType === "gameReact"){
         editMsg(this.states, newBoard, "gameReact");
-    } else {
+        } else if (msgType === "gameButton"){
         editMsg(this.states, newBoard, "gameButton");
-
-    }
+        }
     }
 
 

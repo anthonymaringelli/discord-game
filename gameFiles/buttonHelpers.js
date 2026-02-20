@@ -1,9 +1,5 @@
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle
-} from "discord.js";
-
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { moveData } from "./objects/moveGame/moveData.js"
 
 export function createGameButtons(game) {
   const leftButton = new ButtonBuilder()
@@ -17,4 +13,7 @@ export function createGameButtons(game) {
     .setStyle(ButtonStyle.Secondary);
 
   return new ActionRowBuilder().addComponents(leftButton, rightButton);
+
+
+//   for ( b in moveData.)
 }

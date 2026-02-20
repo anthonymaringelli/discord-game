@@ -134,9 +134,9 @@ export const moveLogic = {
         //  glue all msgs together, then send
     // make buttonHelpers.js more dynamic, not hard coded buttons but from (game)Data.js
     // make handleMoves() automatically get which msgs need to be edited
-    // clean up round
-    // make handleMoves() respond to buttons
+    // clean up around
     // update getDelta()?
+    // end game w buttons
 
     // msg editor at the end of a user reaction
         // checks if update: true,
@@ -147,7 +147,9 @@ export const moveLogic = {
 
  
 
-// strategy comes down to amount of effective choices you have available, 
+
+
+// wide strategy comes down to amount of effective choices you have available, 
 // more you have, richer the strategy
 
 

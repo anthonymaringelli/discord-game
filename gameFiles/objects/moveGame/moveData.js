@@ -5,6 +5,7 @@ export const moveData = {
     character: ":red_square:", 
     leftReact: "⬅️",
     rightReact: "➡️" ,
+    initials: ["⬅️", "➡️"],
     apple: "🍎"
 
 
