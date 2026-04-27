@@ -6,6 +6,10 @@ export const moveData = {
     leftReact: "⬅️",
     rightReact: "➡️" ,
     initials: ["⬅️", "➡️"],
+    moves: [
+        { id: "left", emoji: "⬅️" },
+        { id: "right", emoji: "➡️" }
+    ],
     apple: "🍎"
 
 

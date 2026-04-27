@@ -43,7 +43,7 @@ export class moveGame {
 
 
             // // buttons
-            const row = createGameButtons(this);
+            const row = createGameButtons(this, this.data.initials);
 
             const sentMsg = {
                 content: gameBoardString,
